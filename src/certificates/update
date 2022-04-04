@@ -1,0 +1,5 @@
+#!/bin/sh
+
+openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 \
+  -subj '/CN=localhost' -extensions EXT -config localhost.ini \
+  -keyout localhost.key -out localhost.crt

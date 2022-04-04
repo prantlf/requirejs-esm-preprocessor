@@ -1,0 +1,51 @@
+{
+  // Pro informace o možných atributech použijte technologii IntelliSense.
+  // Umístěním ukazatele myši zobrazíte popisy existujících atributů.
+  // Další informace najdete tady: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "optimize-alone",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@prantlf/requirejs/bin/r.js",
+      "args": ["-o", "demo-alone/build.config.js"],
+      "skipFiles": []
+    },
+    {
+      "name": "optimize-extern",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@prantlf/requirejs/bin/r.js",
+      "args": ["-o", "demo-extern/build.config.js"],
+      "skipFiles": []
+    },
+    {
+      "name": "serve-alone",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/demo-alone/server.js",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "serve-extern",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/demo-server/server.js",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "test-server",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/server.js",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+ ]
+}
