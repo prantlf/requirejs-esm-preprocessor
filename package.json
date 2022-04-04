@@ -94,7 +94,7 @@
     "lit-html": "^1",
     "rollup": "^2.70.1",
     "rollup-plugin-copy": "^3.4.0",
-    "tehanu": "^0.2.1",
+    "tehanu": "^0.2.2",
     "tehanu-repo-coco": "^0.0.2",
     "tehanu-teru": "^0.2.2",
     "terser": "^5.12.1"
