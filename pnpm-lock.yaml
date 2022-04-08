@@ -12,7 +12,7 @@ specifiers:
   mime: ^3.0.0
   morgan: ^1.10.0
   polka: ^0.5.2
-  requirejs-esm: ^2.0.0
+  requirejs-esm: ^2.0.1
   rollup: ^2.70.1
   rollup-plugin-copy: ^3.4.0
   serve-index: ^1.9.1
@@ -26,7 +26,7 @@ dependencies:
   mime: 3.0.0
   morgan: 1.10.0
   polka: 0.5.2
-  requirejs-esm: 2.0.0
+  requirejs-esm: 2.0.1
   serve-index: 1.9.1
 
 devDependencies:
@@ -1213,8 +1213,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /requirejs-esm/2.0.0:
-    resolution: {integrity: sha512-ttMNHgLyNvA6wvHZv+vp/1LD4dAx/oqpI3oiGHXKKp1IOB5nv3SWU9ka3hSHQWuZJg5u5McoAO0TM1lh+8OTxA==}
+  /requirejs-esm/2.0.1:
+    resolution: {integrity: sha512-xvty209WfpmK/oauJYH9hrc/w1hAN0CsGzVbwGc5KdOCHz/JtIpTehloHi/yuD5qm6ScHtj9NOuMR/A0218Y5A==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
