@@ -45,7 +45,7 @@ interface ServerOptions {
   dirMap?: DirMap, appDir?: string, sourceMap?: boolean /*= true */
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */
   secureOptions?: {
-    port: string /*= process.env.PORT || 9876 */
+    port: string /*= process.env.SECURE_PORT || 9876 */
     key?: string | Blob | Buffer /*= 'dist/certificates/localhost.key' */
     cert?: string | Blob | Buffer /*= 'dist/certificates/localhost.crt' */
     allowHTTP1?: boolean /*= true */
