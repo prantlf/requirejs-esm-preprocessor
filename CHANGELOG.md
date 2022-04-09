@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.1.1...v1.2.0) (2022-04-09)
+
+
+### Features
+
+* Make defaults in defaultUsage configurable ([35cfefb](https://github.com/prantlf/requirejs-esm-preprocessor/commit/35cfefbf98b0af659fcfe972fc035ec0fad3881a))
+
 ## [1.1.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.1.0...v1.1.1) (2022-04-09)
 
 
