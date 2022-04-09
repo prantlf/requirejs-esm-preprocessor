@@ -107,7 +107,7 @@ export async function serveScript(req, res, { path, fullPath, resolvePath, dirMa
 }
 
 function endsWithJS(path) {
-  return path.endsWith('.js')
+  return path.endsWith('.js') && !path.endsWith('.min.js')
 }
 
 export function preprocessor({ root = '.', isScript = endsWithJS, scriptsOnly, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent } = {}) {

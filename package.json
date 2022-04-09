@@ -25,6 +25,7 @@
   "module": "dist/esm.js",
   "types": "dist/esm.d.ts",
   "files": [
+    "bin",
     "dist"
   ],
   "scripts": {
@@ -38,9 +39,9 @@
     "demo:local": "npm run optimize:local && npm run minify:local",
     "optimize:local": "r.js -o demo-local/build.config.js",
     "minify:local": "terser -cm --ecma 2018 --comments false --source-map content=demo-local/main-built.js.map --source-map includeSources --source-map url=main-built.min.js.map -o demo-local/main-built.min.js demo-local/main-built.js",
-    "start:local": "node demo-local/server",
-    "lint": "eslint *.js src test",
-    "fix": "eslint *.js src test",
+    "start:local": "./bin/requirejs-esm-serve",
+    "lint": "eslint *.js bin/requirejs-esm-serve src test",
+    "fix": "npm run lint -- --fix",
     "check": "tehanu test/*.js",
     "cover": "c8 npm run check && c8 --no-clean npm run optimize:local && c8 --no-clean npm run optimize:extern && c8 report -r text -r lcov && c8 check-coverage",
     "test": "npm run lint && npm run cover",

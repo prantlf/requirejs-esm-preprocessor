@@ -39,6 +39,16 @@
       ]
     },
     {
+      "name": "serve",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/bin/requirejs-esm-serve",
+      "args": ["-H"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
       "name": "test-server",
       "type": "pwa-node",
       "request": "launch",

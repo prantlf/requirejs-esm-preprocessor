@@ -41,11 +41,11 @@ declare function preprocessor(options?: {
 interface ServerOptions {
   root?: string /*= '.' */, isScript?: IsScript, scriptsOnly?: boolean
   host: string /*= process.env.HOST || '0.0.0.0' */
-  port: string /*= process.env.PORT || 8967 */
+  port: number /*= process.env.PORT || 8967 */
   dirMap?: DirMap, appDir?: string, sourceMap?: boolean /*= true */
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */
   secureOptions?: {
-    port: string /*= process.env.SECURE_PORT || 9876 */
+    port: number /*= process.env.SECURE_PORT || 9876 */
     key?: string | Blob | Buffer /*= 'dist/certificates/localhost.key' */
     cert?: string | Blob | Buffer /*= 'dist/certificates/localhost.crt' */
     allowHTTP1?: boolean /*= true */
@@ -54,6 +54,18 @@ interface ServerOptions {
     format?: string /*= 'dev' */, errorsOnly?: boolean /*= true */
     servedOnly?: boolean /*= true */, transforms?: boolean, silent?: boolean
   }
+}
+
+declare function defaultUsage(name: string): void
+declare function defaultUnknownArg(arg: string): boolean
+declare function configure(args: string[], name: string, version: string,
+  options?: {
+    usage?: () => void, unknownArg?: (arg: string) => boolean
+  }): {
+  server?: boolean, secureServer?: boolean, root?: string,
+  host?: string, port?: number, secureOptions?: { port: number },
+  errorsOnly: boolean /*= true */, servedOnly: boolean /*= true */,
+  transforms?: boolean, silent?: boolean
 }
 
 declare function createHandler(options?: ServerOptions): Handler

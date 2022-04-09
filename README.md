@@ -43,6 +43,10 @@ serve({
 })
 ```
 
+If your project contains source scripts ending with `.js`, which should be transpiled, and all other scripts loaded on pages by `script` elements end with `.min.js`, you can use the ready-to-use command line server:
+
+    requirejs-esm-serve
+
 You can use the ESM module format in modules loaded as dependencies by RequireJS. The main application script cannot be an ESM module, because it would be wrapped in a `define` statement. The main application script i ssupposed to include a `require` statement to perform the application initialisation.
 
 This plugin transpiles only ESM source files. If it detects a statement calling functions `define`, `require` or `require.config` on the root level of the source file, it will return the text of the source file as-is.
@@ -106,7 +110,8 @@ The development web server must not transform static assets that are not meant t
 const { serve } = require('requirejs-esm-preprocessor')
 serve({
   isScript: path => path.endsWith('.js') &&
-    !(path.endsWith('/require.js') || path.endsWith('/require.min.js')),
+    !path => path.endsWith('.min.js') &&
+    !path.endsWith('/require.js'),
   dirMap: { '/node_modules/': '' }
 })
 ```
@@ -163,11 +168,11 @@ preprocessor(options?: {
 interface ServerOptions {
   root?: string = '.', isScript?: IsScript, scriptsOnly?: boolean
   host: string = process.env.HOST || '0.0.0.0'
-  port: string = process.env.PORT || 8967
+  port: number = process.env.PORT || 8967
   dirMap?: DirMap, appDir?: string, sourceMap?: boolean = true
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false
   secureOptions?: {
-    port: string = process.env.SECURE_PORT || 9876
+    port: number = process.env.SECURE_PORT || 9876
     key?: string | Blob | Buffer = 'dist/certificates/localhost.key'
     cert?: string | Blob | Buffer = 'dist/certificates/localhost.crt'
     allowHTTP1?: boolean = true
@@ -176,6 +181,18 @@ interface ServerOptions {
     format?: string = 'dev', errorsOnly?: boolean = true
     servedOnly?: boolean = true, transforms?: boolean, silent?: boolean
   }
+}
+
+defaultUsage(): void
+defaultUnknownArg(arg: string): boolean
+configure(options: {
+  args: string[], version: string,
+  usage?: () => void, unknownArg?: (arg: string) => boolean
+}): {
+  server?: boolean, secureServer?: boolean, root?: string,
+  host?: string, port?: number, secureOptions?: { port: number },
+  errorsOnly: boolean, servedOnly: boolean,
+  transforms?: boolean, silent?: boolean
 }
 
 createHandler(options?: ServerOptions): Handler
