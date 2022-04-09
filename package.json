@@ -7,16 +7,16 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/prantlf/requirejs-esm/blob/master/LICENSE"
+      "url": "https://github.com/prantlf/requirejs-esm-preprocessor/blob/master/LICENSE"
     }
   ],
-  "homepage": "https://github.com/prantlf/requirejs-esm#readme",
+  "homepage": "https://github.com/prantlf/requirejs-esm-preprocessor#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/prantlf/requirejs-esm.git"
+    "url": "https://github.com/prantlf/requirejs-esm-preprocessor.git"
   },
   "bugs": {
-    "url": "https://github.com/prantlf/requirejs-esm/issues"
+    "url": "https://github.com/prantlf/requirejs-esm-preprocessor/issues"
   },
   "engines": {
     "node": ">=14"
@@ -90,7 +90,7 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "c8": "^7.11.0",
-    "eslint": "^8.12.0",
+    "eslint": "^8.13.0",
     "lit-html": "^1",
     "rollup": "^2.70.1",
     "rollup-plugin-copy": "^3.4.0",
