@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.0.2...v1.1.0) (2022-04-09)
+
+
+### Features
+
+* Add a command-lite script to launch the development web server ([3c41ae6](https://github.com/prantlf/requirejs-esm-preprocessor/commit/3c41ae60f5029cf43a241e4ef44a71fb8eb47894))
+* Block requests to favicon.ico by default ([e13f6d1](https://github.com/prantlf/requirejs-esm-preprocessor/commit/e13f6d1bc6ffc16536ca709e800b7e46e99b2cdd))
+
 ## [1.0.2](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.0.1...v1.0.2) (2022-04-09)
 
 
