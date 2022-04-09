@@ -1,35 +1,44 @@
-export function defaultUsage (name) {
+export function defaultUsage (name, {
+  server = true, port = process.env.PORT || 8967,
+  secureServer = true, securePort = process.env.SECURE_PORT || 9876,
+  host = process.env.HOST || '0.0.0.0', root = '.',
+  errorsOnly = true, servedOnly = true, transforms = false, silent = false,
+  extraOptions = '', extraExamples = ''
+} = {}) {
   console.log(`Launches a development web server.
 
 Usage: ${name} [option...]
 
 Options:
-  -I|--[no-]insecure         enable the HTTP listener  (default: true)
-  -p|--port <number>         HTTP port to listen to    (default: 7777)
-  -S|--[no-]secure           enable the HTTPS listener (default: true)
-  -s|--secure-port <number>  HTTPS port to listen to   (default: 9999)
-  -h|--host <name>           host to bind the port to  (default: "0.0.0.0")
-  -r|--root <path>           root directory to serve   (default: ".")
-  -e|--[no-]log-errors       log failed requests       (default: true)
-  -u|--[no-]log-successes    log successful requests   (default: false)
-  -c|--[no-]log-cached       log cached and redirects  (default: false)
-  -t|--[no-]log-transforms   log transformations       (default: false)
+  -I|--[no-]insecure         enable the HTTP listener  (default: ${server})
+  -p|--port <number>         HTTP port to listen to    (default: ${port})
+  -S|--[no-]secure           enable the HTTPS listener (default: ${secureServer})
+  -s|--secure-port <number>  HTTPS port to listen to   (default: ${securePort})
+  -h|--host <name>           host to bind the port to  (default: "${host}")
+  -r|--root <path>           root directory to serve   (default: "${root}")
+  -e|--[no-]log-errors       log failed requests       (default: ${!silent})
+  -u|--[no-]log-successes    log successful requests   (default: ${!errorsOnly})
+  -c|--[no-]log-cached       log cached and redirects  (default: ${!servedOnly})
+  -t|--[no-]log-transforms   log transformations       (default: ${transforms})
   -V|--version               print version number
   -H|--help                  print usage instructions
-
+${extraOptions}
 Examples:
-  ${name} -p 8888 --no-secure
-  ${name} --no-u
-`)
+  ${name} -p 80 --no-secure
+  ${name} -u
+${extraExamples}`)
 }
 
 export function defaultUnknownArg(arg) {
   console.error(`Unknown argument: "${arg}".`)
 }
 
-export function configure(args, name, version, { usage = defaultUsage, unknownArg = defaultUnknownArg } = {}) {
-  let server, port, secureServer, securePort, host, root,
-      errorsOnly = true, servedOnly = true, transforms, silent
+export function configure(args, name, version, options = {}) {
+  let {
+    server, port, secureServer, securePort, host, root,
+    errorsOnly = true, servedOnly = true, transforms, silent,
+    usage = defaultUsage, unknownArg = defaultUnknownArg
+  } = options
 
   for (let i = 0, l = args.length; i < l; ++i) {
     const arg = args[i]
@@ -72,7 +81,7 @@ export function configure(args, name, version, { usage = defaultUsage, unknownAr
           process.exit(0)
           break
         case 'H': case 'help':
-          usage(name)
+          usage(name, options)
           process.exit(0)
       }
     }

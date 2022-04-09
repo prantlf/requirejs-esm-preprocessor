@@ -38,35 +38,65 @@ declare function preprocessor(options?: {
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): Handler
 
-interface ServerOptions {
-  root?: string /*= '.' */, isScript?: IsScript, scriptsOnly?: boolean
-  host: string /*= process.env.HOST || '0.0.0.0' */
-  port: number /*= process.env.PORT || 8967 */
-  dirMap?: DirMap, appDir?: string, sourceMap?: boolean /*= true */
-  needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */
-  secureOptions?: {
-    port: number /*= process.env.SECURE_PORT || 9876 */
-    key?: string | Blob | Buffer /*= 'dist/certificates/localhost.key' */
-    cert?: string | Blob | Buffer /*= 'dist/certificates/localhost.crt' */
-    allowHTTP1?: boolean /*= true */
-  }
-  logOptions?: {
-    format?: string /*= 'dev' */, errorsOnly?: boolean /*= true */
-    servedOnly?: boolean /*= true */, transforms?: boolean, silent?: boolean
-  }
-  favicon?: boolean
+interface BaseOptions {
+  root?: string /*= '.' */
+  host?: string /*= process.env.HOST || '0.0.0.0' */
+  port?: number /*= process.env.PORT || 8967 */
+  server?: boolean /*= true */
+  secureServer?: boolean /*= true */
 }
 
-declare function defaultUsage(name: string): void
+interface BaseLogOptions {
+  errorsOnly?: boolean /*= true */
+  servedOnly?: boolean /*= true */
+  transforms?: boolean
+  silent?: boolean
+}
+
+interface BaseConfigureOptions extends BaseOptions, BaseLogOptions {}
+
+interface UsageOptions extends BaseConfigureOptions {
+  securePort?: number /*= process.env.SECURE_PORT || 9876 */
+  extraOptions?: string /*= '' */
+  extraExamples?: string /*= '' */
+}
+
+interface ConfigureOptions extends UsageOptions {
+  usage?: () => void
+  unknownArg?: (arg: string) => boolean
+}
+
+interface ConfigureResult extends BaseConfigureOptions {
+  secureOptions?: { port: number }
+}
+
+declare function defaultUsage(name: string, options?: UsageOptions): void
 declare function defaultUnknownArg(arg: string): boolean
 declare function configure(args: string[], name: string, version: string,
-  options?: {
-    usage?: () => void, unknownArg?: (arg: string) => boolean
-  }): {
-  server?: boolean, secureServer?: boolean, root?: string,
-  host?: string, port?: number, secureOptions?: { port: number },
-  errorsOnly: boolean /*= true */, servedOnly: boolean /*= true */,
-  transforms?: boolean, silent?: boolean
+  options?: ConfigureOptions): ConfigureResult
+
+interface LogOptions extends BaseLogOptions {
+  format?: string /*= 'dev' */
+}
+
+interface SecureOptions {
+  port: number /*= process.env.SECURE_PORT || 9876 */
+  key?: string | Blob | Buffer /*= 'dist/certificates/localhost.key' */
+  cert?: string | Blob | Buffer /*= 'dist/certificates/localhost.crt' */
+  allowHTTP1?: boolean /*= true */
+}
+
+interface ServerOptions extends BaseOptions {
+  isScript?: IsScript
+  scriptsOnly?: boolean
+  dirMap?: DirMap
+  appDir?: string
+  sourceMap?: boolean /*= true */
+  needsResolve?: NeedsResolve
+  resolvePath?: ResolvePath /*= false */
+  secureOptions?: SecureOptions
+  logOptions?: LogOptions
+  favicon?: boolean
 }
 
 declare function createHandler(options?: ServerOptions): Handler
