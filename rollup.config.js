@@ -17,6 +17,7 @@ export default {
     })
   ],
   external: [
-    'cors', 'fs/promises', 'mime', 'morgan', 'polka', 'requirejs-esm', 'serve-index'
+    'connect-block-favicon', 'cors', 'fs/promises', 'mime', 'morgan', 'polka',
+    'requirejs-esm', 'serve-index'
   ]
 }

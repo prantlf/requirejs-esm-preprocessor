@@ -54,6 +54,7 @@ interface ServerOptions {
     format?: string /*= 'dev' */, errorsOnly?: boolean /*= true */
     servedOnly?: boolean /*= true */, transforms?: boolean, silent?: boolean
   }
+  favicon?: boolean
 }
 
 declare function defaultUsage(name: string): void

@@ -5,22 +5,25 @@ import polka from 'polka'
 import morgan from 'morgan'
 import cors from 'cors'
 import serveIndex from 'serve-index'
+import blockFavicon from 'connect-block-favicon'
 import { preprocessor } from './preprocessor'
 
 export function createHandler(options = {}) {
   const {
-    root = '.', isScript, scriptsOnly, resolvePath, dirMap, appDir, needsResolve, sourceMap, logOptions = {}
+    root = '.', isScript, scriptsOnly, resolvePath, dirMap, appDir, needsResolve,
+    sourceMap, logOptions = {}, favicon
   } = options
   const {
     format = 'dev', errorsOnly = true, servedOnly = true, transforms, silent
   } = logOptions
-  return polka()
+  const server = polka()
     .use(morgan(format, {
       skip: (req, { statusCode }) => silent || errorsOnly && statusCode < 400 ||
         servedOnly && statusCode >= 300 && statusCode < 400
     }))
     .use(cors())
-    .use(serveIndex(root))
+  if (!favicon) server.use(blockFavicon())
+  return server.use(serveIndex(root))
     .use(preprocessor({ root, isScript, scriptsOnly, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose: transforms, silent }))
     .handler
 }

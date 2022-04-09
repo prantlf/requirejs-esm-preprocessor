@@ -6,6 +6,7 @@ specifiers:
   '@semantic-release/changelog': ^6.0.1
   '@semantic-release/git': ^10.0.1
   c8: ^7.11.0
+  connect-block-favicon: ^1.0.5
   cors: ^2.8.5
   eslint: ^8.13.0
   lit-html: ^1
@@ -22,6 +23,7 @@ specifiers:
   terser: ^5.12.1
 
 dependencies:
+  connect-block-favicon: 1.0.5
   cors: 2.8.5
   mime: 3.0.0
   morgan: 1.10.0
@@ -395,6 +397,11 @@ packages:
   /concat-map/0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
+
+  /connect-block-favicon/1.0.5:
+    resolution: {integrity: sha512-qKWCLe5HBIQQasvltolDDRoJKD0zZLSGM4jfihUVHIoHGCkRXLoiaGvfKYOcQJnUVIM6ftKzNnYzoUtVOPkVWg==}
+    engines: {node: '>=6'}
+    dev: false
 
   /convert-source-map/1.8.0:
     resolution: {integrity: sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA==}

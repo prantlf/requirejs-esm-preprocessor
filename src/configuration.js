@@ -70,6 +70,7 @@ export function configure(args, name, version, { usage = defaultUsage, unknownAr
         case 'V': case 'version':
           console.log(version)
           process.exit(0)
+          break
         case 'H': case 'help':
           usage(name)
           process.exit(0)
