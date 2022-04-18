@@ -28,7 +28,9 @@ async function checkStats(req, res, path) {
   const { mtime: modified } = stats
   const cached = req.headers['if-modified-since']
   modified.setMilliseconds(0)
-  if (!cached || new Date(cached) < modified) return stats
+  if (!cached || new Date(cached) < modified) {
+    return stats.isFile() ? stats : { next: true }
+  }
   res.writeHead(304)
   res.end()
   return {}
@@ -86,8 +88,8 @@ function checkMethod(req, res, path, mtime, size) {
 }
 
 export async function serveFile(req, res, path) {
-  const { mtime, size } = await checkStats(req, res, path)
-  if (!(mtime && checkMethod(req, res, path, mtime, size))) return
+  const { mtime, size, next } = await checkStats(req, res, path)
+  if (!(mtime && checkMethod(req, res, path, mtime, size))) return { next }
   const { start, end } = serveHeaders(req, res, path, mtime, size)
   const stream = end ?
     createReadStream(path, { start, end }) : createReadStream(path)
@@ -116,7 +118,9 @@ export function preprocessor({ root = '.', isScript = endsWithJS, scriptsOnly, r
     const fullPath = join(root, path)
     const promise = isScript(path) && serveScript(req, res, { path, fullPath, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent })
       || !scriptsOnly && serveFile(req, res, fullPath)
-    if (promise) promise.catch(err => serveError(req, res, err))
+    if (promise) promise
+      .then(out => out && out.next && next())
+      .catch(err => serveError(req, res, err))
     else next()
   }
 }
