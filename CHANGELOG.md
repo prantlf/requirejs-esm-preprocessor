@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.2.0...v1.2.1) (2022-04-18)
+
+
+### Bug Fixes
+
+* Skip directories, when passed to the preprocessor middleware ([34c93ff](https://github.com/prantlf/requirejs-esm-preprocessor/commit/34c93ff332b53a55d3c4e502d81d2d440dc75966))
+
 # [1.2.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.1.1...v1.2.0) (2022-04-09)
 
 
