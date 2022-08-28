@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.2.1...v1.3.0) (2022-08-28)
+
+
+### Features
+
+* Add failthrough flag and setHeaders callback ([38f5d4d](https://github.com/prantlf/requirejs-esm-preprocessor/commit/38f5d4dc6b68be7be22894a914add7d97681f94a))
+* Add parameter cache to disable the 304 caching ([7a794bb](https://github.com/prantlf/requirejs-esm-preprocessor/commit/7a794bbd75bc1d5156fec3613fe0802061ec1200))
+
 ## [1.2.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.2.0...v1.2.1) (2022-04-18)
 
 
