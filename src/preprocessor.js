@@ -23,12 +23,12 @@ function serveError(req, res, code, text) {
   res.end(text || STATUS_CODES[code])
 }
 
-async function checkStats(req, res, path) {
+async function checkStats(req, res, path, cache) {
   const stats = await stat(path)
   const { mtime: modified } = stats
   const cached = req.headers['if-modified-since']
   modified.setMilliseconds(0)
-  if (!cached || new Date(cached) < modified) {
+  if (cache === false || !cached || new Date(cached) < modified) {
     return stats.isFile() ? stats : { next: true }
   }
   res.writeHead(304)
@@ -100,8 +100,8 @@ function checkMethod(req, res, path, mtime, size) {
 export async function serveFile(req, res, options) {
   /* c8 ignore next */
   if (typeof options === 'string') options = { fullPath: options }
-  const { fullPath, setHeaders } = options
-  const stats = await checkStats(req, res, fullPath)
+  const { fullPath, cache, setHeaders } = options
+  const stats = await checkStats(req, res, fullPath, cache)
   const { mtime, size, next } = stats
   if (!(mtime && checkMethod(req, res, fullPath, mtime, size))) return { next }
   const { start, end, failed } = serveHeaders(req, res, fullPath, size, stats, setHeaders)
@@ -112,10 +112,10 @@ export async function serveFile(req, res, options) {
 }
 
 export async function serveScript(req, res, {
-  setHeaders, path, fullPath, resolvePath, dirMap, appDir,
+  cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
   needsResolve, sourceMap, verbose, silent
 }) {
-  const stats = await checkStats(req, res, fullPath)
+  const stats = await checkStats(req, res, fullPath, cache)
   const { mtime } = stats
   if (!mtime) return
   const contents = await readFile(fullPath, 'utf8')
@@ -135,7 +135,7 @@ function endsWithJS(path) {
 }
 
 export function preprocessor({
-  root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, setHeaders,
+  root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
   resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
 } = {}) {
   return async function (req, res, next) {
@@ -145,11 +145,11 @@ export function preprocessor({
       let out
       if (isScript(path)) {
         out = await serveScript(req, res, {
-          setHeaders, path, fullPath,
+          cache, setHeaders, path, fullPath,
           resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
         })
       } else if (!scriptsOnly) {
-        out = await serveFile(req, res, { setHeaders, fullPath })
+        out = await serveFile(req, res, { cache, setHeaders, fullPath })
       } else {
         return next()
       }

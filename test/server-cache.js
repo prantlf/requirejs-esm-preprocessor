@@ -7,7 +7,7 @@ const { preprocessor, startServer } = require('../dist/cjs')
 let server
 test.before(async () => {
   const { handler } = polka()
-    .use(preprocessor({ fallthrough: false }))
+    .use(preprocessor({ fallthrough: false, cache: false }))
     .use((req, res) => {
       res.writeHead(201)
       res.end('test')
@@ -36,4 +36,11 @@ test('fails through for an missing file', async () => {
   const { res, data } = await request('/dummy')
   equal(res.statusCode, 404)
   equal(data, 'ENOENT: no such file or directory, stat \'dummy\'')
+})
+
+test('sends the same content once more', async () => {
+  const { res: cache } = await request('/LICENSE')
+  const { 'last-modified': date } = cache.headers
+  const { res } = await request('/LICENSE', { headers: { 'if-modified-since': date }})
+  equal(res.statusCode, 200)
 })

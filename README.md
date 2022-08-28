@@ -162,7 +162,7 @@ serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
 preprocessor(options?: {
   root?: string = '.', scriptsOnly?: boolean, fallthrough?: boolean,
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
-  isScript?: IsScript, dirMap?: DirMap, appDir?: string,
+  cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): Handler
 
