@@ -160,8 +160,9 @@ serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): void
 preprocessor(options?: {
-  root?: string = '.', scriptsOnly?: boolean, isScript?: IsScript,
-  dirMap?: DirMap, appDir?: string,
+  root?: string = '.', scriptsOnly?: boolean, fallthrough?: boolean,
+  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
+  isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): Handler
 

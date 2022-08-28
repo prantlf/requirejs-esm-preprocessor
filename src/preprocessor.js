@@ -10,15 +10,15 @@ function cutQuery(url) {
   return questionMark > 0 ? url.substring(0, questionMark) : url
 }
 
+function inferStatus(err) {
+  if (err.code === 'ENOENT') return 404
+  /* c8 ignore next 3 */
+  console.error(err)
+  return 500
+}
+
 function serveError(req, res, code, text) {
-  if (code instanceof Error) {
-    if (code.code === 'ENOENT') {
-      code = 404
-    } else {
-      console.error(code)
-      code = 500
-    }
-  }
+  if (code instanceof Error) code = inferStatus(code)
   res.writeHead(code, { 'content-type': 'text/plain' })
   res.end(text || STATUS_CODES[code])
 }
@@ -51,7 +51,10 @@ function createHeaders(path, mtime) {
 function createRange(size, range) {
   const [part0, part1] = range.replace(/bytes=/, '').split('-')
   const start = +part0
-  const end = part1 ? +part1 : size
+  const end = part1 ? +part1 : size - 1
+  if (start < 0 || start >= size || end < 0 || end < start || end >= size) {
+    return {}
+  }
   size = end - start + 1
   return {
     start, end,
@@ -62,14 +65,21 @@ function createRange(size, range) {
   }
 }
 
-function serveHeaders(req, res, path, mtime, size) {
+function serveHeaders(req, res, path, size, stats, setHeaders) {
+  const { mtime } = stats
   const headers = createHeaders(path, mtime)
   const { range } = req.headers
   if (range) {
     const { start, end, rangeHeaders } = createRange(size, range)
+    if (!end) {
+      serveError(req, res, 416)
+      return { failed: true }
+    }
+    setHeaders && setHeaders(res, path, stats)
     res.writeHead(206, { ...rangeHeaders, ...headers })
     return { start, end }
   }
+  setHeaders && setHeaders(res, path, stats)
   res.writeHead(200, { 'content-length': size, ...headers })
   return {}
 }
@@ -87,40 +97,72 @@ function checkMethod(req, res, path, mtime, size) {
   else serveError(req, res, 405)
 }
 
-export async function serveFile(req, res, path) {
-  const { mtime, size, next } = await checkStats(req, res, path)
-  if (!(mtime && checkMethod(req, res, path, mtime, size))) return { next }
-  const { start, end } = serveHeaders(req, res, path, mtime, size)
-  const stream = end ?
-    createReadStream(path, { start, end }) : createReadStream(path)
-  stream.pipe(res)
+export async function serveFile(req, res, options) {
+  /* c8 ignore next */
+  if (typeof options === 'string') options = { fullPath: options }
+  const { fullPath, setHeaders } = options
+  const stats = await checkStats(req, res, fullPath)
+  const { mtime, size, next } = stats
+  if (!(mtime && checkMethod(req, res, fullPath, mtime, size))) return { next }
+  const { start, end, failed } = serveHeaders(req, res, fullPath, size, stats, setHeaders)
+  if (!failed) {
+    const stream = end ? createReadStream(fullPath, { start, end }) : createReadStream(fullPath)
+    stream.pipe(res)
+  }
 }
 
-export async function serveScript(req, res, { path, fullPath, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent }) {
-  const { mtime } = await checkStats(req, res, fullPath)
+export async function serveScript(req, res, {
+  setHeaders, path, fullPath, resolvePath, dirMap, appDir,
+  needsResolve, sourceMap, verbose, silent
+}) {
+  const stats = await checkStats(req, res, fullPath)
+  const { mtime } = stats
   if (!mtime) return
   const contents = await readFile(fullPath, 'utf8')
-  const code = preprocess({ path, contents, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent })
+  const code = preprocess({
+    path, contents,
+    resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+  })
   const bytes = Buffer.from(code)
   const { length } = bytes
   if (!checkMethod(req, res, path, mtime, length)) return
-  const { start, end } = serveHeaders(req, res, path, mtime, length)
-  res.end(end ? bytes.subarray(start, end) : bytes)
+  const { start, end, failed } = serveHeaders(req, res, path, length, stats, setHeaders)
+  if (!failed) res.end(end ? bytes.subarray(start, end + 1) : bytes)
 }
 
 function endsWithJS(path) {
   return path.endsWith('.js') && !path.endsWith('.min.js')
 }
 
-export function preprocessor({ root = '.', isScript = endsWithJS, scriptsOnly, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent } = {}) {
-  return function (req, res, next) {
+export function preprocessor({
+  root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, setHeaders,
+  resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+} = {}) {
+  return async function (req, res, next) {
     const path = cutQuery(req.url)
     const fullPath = join(root, path)
-    const promise = isScript(path) && serveScript(req, res, { path, fullPath, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent })
-      || !scriptsOnly && serveFile(req, res, fullPath)
-    if (promise) promise
-      .then(out => out && out.next && next())
-      .catch(err => serveError(req, res, err))
-    else next()
+    try {
+      let out
+      if (isScript(path)) {
+        out = await serveScript(req, res, {
+          setHeaders, path, fullPath,
+          resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+        })
+      } else if (!scriptsOnly) {
+        out = await serveFile(req, res, { setHeaders, fullPath })
+      } else {
+        return next()
+      }
+      if (out && out.next) next()
+    } catch (err) {
+      if (fallthrough) {
+        next()
+      } else if (fallthrough === false) {
+        if (typeof err.code === 'string') err.code = inferStatus(err)
+        next(err)
+      } else {
+        serveError(req, res, err)
+      }
+    }
   }
 }

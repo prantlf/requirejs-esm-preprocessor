@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "optimize-alone",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@prantlf/requirejs/bin/r.js",
       "args": ["-o", "demo-alone/build.config.js"],
@@ -14,7 +14,7 @@
     },
     {
       "name": "optimize-extern",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@prantlf/requirejs/bin/r.js",
       "args": ["-o", "demo-extern/build.config.js"],
@@ -22,7 +22,7 @@
     },
     {
       "name": "serve-alone",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/demo-alone/server.js",
       "skipFiles": [
@@ -31,7 +31,7 @@
     },
     {
       "name": "serve-extern",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/demo-server/server.js",
       "skipFiles": [
@@ -40,7 +40,7 @@
     },
     {
       "name": "serve",
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/bin/requirejs-esm-serve",
       "args": ["-H"],
@@ -49,13 +49,14 @@
       ]
     },
     {
-      "name": "test-server",
-      "type": "pwa-node",
+      "name": "test",
+      "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/test/server.js",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
       "skipFiles": [
         "<node_internals>/**"
       ]
     }
- ]
+  ]
 }

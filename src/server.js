@@ -10,8 +10,8 @@ import { preprocessor } from './preprocessor'
 
 export function createHandler(options = {}) {
   const {
-    root = '.', isScript, scriptsOnly, resolvePath, dirMap, appDir, needsResolve,
-    sourceMap, logOptions = {}, favicon
+    root = '.', isScript, scriptsOnly, fallthrough, setHeaders, resolvePath,
+    dirMap, appDir, needsResolve, sourceMap, logOptions = {}, favicon
   } = options
   const {
     format = 'dev', errorsOnly = true, servedOnly = true, transforms, silent
@@ -23,8 +23,12 @@ export function createHandler(options = {}) {
     }))
     .use(cors())
   if (!favicon) server.use(blockFavicon())
-  return server.use(serveIndex(root))
-    .use(preprocessor({ root, isScript, scriptsOnly, resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose: transforms, silent }))
+  return server
+    .use(preprocessor({
+      root, isScript, scriptsOnly, fallthrough, setHeaders, resolvePath,
+      dirMap, appDir, needsResolve, sourceMap, verbose: transforms, silent
+    }))
+    .use(serveIndex(root))
     .handler
 }
 
@@ -102,6 +106,7 @@ export async function startServer(options = {}, server, secureServer, handler) {
   })
 }
 
+/* c8 ignore next 3 */
 export function serve(options) {
   startServer(options).catch(err => console.error(err))
 }

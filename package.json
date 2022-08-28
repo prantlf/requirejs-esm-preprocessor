@@ -43,7 +43,7 @@
     "lint": "eslint *.js bin/requirejs-esm-serve src test",
     "fix": "npm run lint -- --fix",
     "check": "tehanu test/*.js",
-    "cover": "c8 npm run check && c8 --no-clean npm run optimize:local && c8 --no-clean npm run optimize:extern && c8 report -r text -r lcov && c8 check-coverage",
+    "cover": "c8 npm run check && c8 --no-clean bin/requirejs-esm-serve -S -I -V && c8 --no-clean bin/requirejs-esm-serve --no-insecure --no-secure -H && c8 --no-clean bin/requirejs-esm-serve -X || c8 --no-clean npm run optimize:local && c8 --no-clean npm run optimize:extern && c8 report -r text -r lcov && c8 check-coverage",
     "test": "npm run lint && npm run cover",
     "start": "python3 -m http.server"
   },
@@ -52,15 +52,11 @@
       "src/**",
       "dist/*"
     ],
-    "excludeNodeModules": true,
-    "exclude": [
-      "node_modules/**"
-    ],
     "reporter": [],
-    "branches": 85,
-    "lines": 95,
-    "functions": 95,
-    "statements": 95
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100
   },
   "release": {
     "plugins": [
@@ -83,23 +79,23 @@
     "mime": "^3.0.0",
     "morgan": "^1.10.0",
     "polka": "^0.5.2",
-    "requirejs-esm": "^2.1.0",
+    "requirejs-esm": "^2.3.0",
     "serve-index": "^1.9.1"
   },
   "devDependencies": {
     "@prantlf/requirejs": "^3.0.0",
-    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
-    "c8": "^7.11.0",
-    "eslint": "^8.13.0",
+    "c8": "^7.12.0",
+    "eslint": "^8.23.0",
     "lit-html": "^1",
-    "rollup": "^2.70.2",
+    "rollup": "^2.78.1",
     "rollup-plugin-copy": "^3.4.0",
-    "tehanu": "^0.2.2",
-    "tehanu-repo-coco": "^0.0.2",
-    "tehanu-teru": "^0.2.2",
-    "terser": "^5.12.1"
+    "tehanu": "^1.0.1",
+    "tehanu-repo-coco": "^1.0.0",
+    "tehanu-teru": "^1.0.0",
+    "terser": "^5.15.0"
   },
   "keywords": [
     "requirejs",

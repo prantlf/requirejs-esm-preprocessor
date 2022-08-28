@@ -27,14 +27,18 @@ declare function preprocess(options?: {
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
 
-declare function serveFile(req: http.OutgoingMessage, res: http.IncomingMessage, path: string) :void
+declare function serveFile(req: http.OutgoingMessage, res: http.IncomingMessage, options: string | {
+  fallthrough?: boolean, setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void
+}) :void
 declare function serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
+  fallthrough?: boolean, setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): void
 declare function preprocessor(options?: {
-  root?: string /*= '.' */, scriptsOnly?: boolean, isScript?: IsScript,
-  dirMap?: DirMap, appDir?: string,
+  root?: string /*= '.' */, scriptsOnly?: boolean, fallthrough?: boolean,
+  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
+  isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): Handler
 

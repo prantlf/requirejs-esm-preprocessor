@@ -5,9 +5,11 @@ const test = require('tehanu')(__filename)
 const { createServer, createSecureServer, startServer } = require('../dist/cjs')
 
 let server, secureServer
-test.before(async () =>
-  ({ server, secureServer } = await startServer()))
-test.after(() => (server.close(), secureServer.close()))
+test.before(async () => ({ server, secureServer } = await startServer()))
+test.after(async () => {
+  await server.close()
+  await secureServer.close()
+})
 
 function request(path, { method = 'GET', protocol = 'http', headers } = {}) {
   return new Promise((resolve, reject) =>
@@ -34,6 +36,11 @@ test('creates a default handler', async () => {
 
 test('fails for an unsupported method', async () => {
   const { res } = await request('/LICENSE', { method: 'POST' })
+  equal(res.statusCode, 405)
+})
+
+test('fails for an unsupported method for a script', async () => {
+  const { res } = await request('/demo-local/src/index.js', { method: 'POST' })
   equal(res.statusCode, 405)
 })
 
@@ -67,6 +74,28 @@ test('serves a part of a file', async () => {
   equal(data, 'MIT')
 })
 
+test('serves a part of a script', async () => {
+  const { res, data } = await request('/demo-local/src/index.js', { headers: { range: 'bytes=0-6' } })
+  equal(res.statusCode, 206)
+  equal(data, 'require')
+})
+
+test('serves the last part of a file', async () => {
+  const { res, data } = await request('/LICENSE', { headers: { range: 'bytes=1063' } })
+  equal(res.statusCode, 206)
+  equal(data, 'SOFTWARE.\n')
+})
+
+test('fails for an invalid range', async () => {
+  const { res } = await request('/LICENSE', { headers: { range: 'bytes=1073' } })
+  equal(res.statusCode, 416)
+})
+
+test('fails for an invalid range of a script', async () => {
+  const { res } = await request('/demo-local/src/index.js', { headers: { range: 'bytes=1000' } })
+  equal(res.statusCode, 416)
+})
+
 test('recognises the same content', async () => {
   const { res: cache } = await request('/LICENSE')
   const { 'last-modified': date } = cache.headers
@@ -88,4 +117,11 @@ test('serves an AMD script', async () => {
   const { res, data } = await request('/demo-local/src/index.js')
   equal(res.statusCode, 200)
   equal(data, expected)
+})
+
+test('recognises the same script', async () => {
+  const { res: cache } = await request('/demo-local/src/index.js')
+  const { 'last-modified': date } = cache.headers
+  const { res } = await request('/demo-local/src/index.js', { headers: { 'if-modified-since': date }})
+  equal(res.statusCode, 304)
 })
