@@ -58,6 +58,7 @@ export async function createSecureServer(options = {}, handler) {
 }
 
 export async function startServer(options = {}, server, secureServer, handler) {
+  /* c8 ignore next 11 */
   const {
     host = process.env.HOST || '0.0.0.0', port = +(process.env.PORT || 8967),
     secureOptions = {}, logOptions = {}

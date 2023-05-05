@@ -19,7 +19,7 @@ test.before(async () => {
       res.writeHead(201)
       res.end('test')
     });
-  ({ server } = await startServer({}, null, false, handler))
+  ({ server } = await startServer({ host: 'localhost' }, null, false, handler))
 })
 test.after(() => server.close())
 

@@ -5,7 +5,7 @@ const test = require('tehanu')(__filename)
 const { createServer, createSecureServer, startServer } = require('../dist/cjs')
 
 let server, secureServer
-test.before(async () => ({ server, secureServer } = await startServer()))
+test.before(async () => ({ server, secureServer } = await startServer({ host: 'localhost' })))
 test.after(async () => {
   await server.close()
   await secureServer.close()
@@ -81,13 +81,13 @@ test('serves a part of a script', async () => {
 })
 
 test('serves the last part of a file', async () => {
-  const { res, data } = await request('/LICENSE', { headers: { range: 'bytes=1063' } })
+  const { res, data } = await request('/LICENSE', { headers: { range: 'bytes=1068' } })
   equal(res.statusCode, 206)
   equal(data, 'SOFTWARE.\n')
 })
 
 test('fails for an invalid range', async () => {
-  const { res } = await request('/LICENSE', { headers: { range: 'bytes=1073' } })
+  const { res } = await request('/LICENSE', { headers: { range: 'bytes=1078' } })
   equal(res.statusCode, 416)
 })
 
