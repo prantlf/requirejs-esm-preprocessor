@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.3.1...v1.4.0) (2023-05-10)
+
+
+### Features
+
+* Allow inserting additional handlers vua server options ([e0bb38e](https://github.com/prantlf/requirejs-esm-preprocessor/commit/e0bb38e290f4fdec49b3d6c308d94badd9f61982))
+
 ## [1.3.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.3.0...v1.3.1) (2023-05-05)
 
 
