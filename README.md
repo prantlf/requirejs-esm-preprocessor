@@ -182,6 +182,9 @@ interface ServerOptions {
     format?: string = 'dev', errorsOnly?: boolean = true
     servedOnly?: boolean = true, transforms?: boolean, silent?: boolean
   }
+  leadingHandlers?: Handler[]
+  middleHandlers?: Handler[]
+  trailingHandlers?: Handler[]
   favicon?: boolean
 }
 

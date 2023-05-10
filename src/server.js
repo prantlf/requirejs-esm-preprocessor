@@ -11,25 +11,33 @@ import { preprocessor } from './preprocessor'
 export function createHandler(options = {}) {
   const {
     root = '.', isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
-    dirMap, appDir, needsResolve, sourceMap, logOptions = {}, favicon
+    dirMap, appDir, needsResolve, sourceMap, logOptions = {},
+    leadingHandlers = [], middleHandlers = [], trailingHandlers = [], favicon
   } = options
   const {
     format = 'dev', errorsOnly = true, servedOnly = true, transforms, silent
   } = logOptions
   const server = polka()
+  /* c8 ignore next */
+  for (const handler of leadingHandlers) server.use(handler)
+  server
     .use(morgan(format, {
       skip: (req, { statusCode }) => silent || errorsOnly && statusCode < 400 ||
         servedOnly && statusCode >= 300 && statusCode < 400
     }))
     .use(cors())
+  /* c8 ignore next */
+  for (const handler of middleHandlers) server.use(handler)
   if (!favicon) server.use(blockFavicon())
-  return server
+  server
     .use(preprocessor({
       root, isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
       dirMap, appDir, needsResolve, sourceMap, verbose: transforms, silent
     }))
     .use(serveIndex(root))
-    .handler
+  /* c8 ignore next */
+  for (const handler of trailingHandlers) server.use(handler)
+  return server.handler
 }
 
 export function createServer(options = {}, handler) {

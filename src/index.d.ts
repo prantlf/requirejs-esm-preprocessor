@@ -102,6 +102,9 @@ interface ServerOptions extends BaseOptions {
   resolvePath?: ResolvePath /*= false */
   secureOptions?: SecureOptions
   logOptions?: LogOptions
+  leadingHandlers?: Handler[]
+  middleHandlers?: Handler[]
+  trailingHandlers?: Handler[]
   favicon?: boolean
 }
 
