@@ -186,6 +186,9 @@ interface ServerOptions {
   middleHandlers?: Handler[]
   trailingHandlers?: Handler[]
   favicon?: boolean
+  server?: http.Server | false
+  secureServer?: http.Server | false
+  handler?: Handler
 }
 
 defaultUsage(): void

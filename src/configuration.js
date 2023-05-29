@@ -10,16 +10,16 @@ export function defaultUsage (name, {
 Usage: ${name} [option...]
 
 Options:
-  -I|--[no-]insecure         enable the HTTP listener  (default: ${server})
-  -p|--port <number>         HTTP port to listen to    (default: ${port})
-  -S|--[no-]secure           enable the HTTPS listener (default: ${secureServer})
-  -s|--secure-port <number>  HTTPS port to listen to   (default: ${securePort})
-  -h|--host <name>           host to bind the port to  (default: "${host}")
-  -r|--root <path>           root directory to serve   (default: "${root}")
-  -e|--[no-]log-errors       log failed requests       (default: ${!silent})
-  -u|--[no-]log-successes    log successful requests   (default: ${!errorsOnly})
-  -c|--[no-]log-cached       log cached and redirects  (default: ${!servedOnly})
-  -t|--[no-]log-transforms   log transformations       (default: ${transforms})
+  -I|--no-insecure           disable the HTTP listener  (default: ${server})
+  -p|--port <number>         HTTP port to listen to     (default: ${port})
+  -S|--no-secure             disable the HTTPS listener (default: ${secureServer})
+  -s|--secure-port <number>  HTTPS port to listen to    (default: ${securePort})
+  -h|--host <name>           host to bind the port to   (default: "${host}")
+  -r|--root <path>           root directory to serve    (default: "${root}")
+  -e|--[no-]log-errors       log failed requests        (default: ${!silent})
+  -u|--[no-]log-successes    log successful requests    (default: ${!errorsOnly})
+  -c|--[no-]log-cached       log cached and redirects   (default: ${!servedOnly})
+  -t|--[no-]log-transforms   log transformations        (default: ${transforms})
   -V|--version               print version number
   -H|--help                  print usage instructions
 ${extraOptions}
@@ -47,13 +47,13 @@ export function configure(args, name, version, options = {}) {
       const flag = match[1] !== 'no-'
       switch (match[2]) {
         case 'I': case 'insecure':
-          server = flag ? undefined : false
+          server = false
           continue
         case 'p': case 'port':
           port = +args[++i]
           continue
         case 'S': case 'secure':
-          secureServer = flag ? undefined : false
+          secureServer = false
           continue
         case 's': case 'secure-port':
           securePort = +args[++i]

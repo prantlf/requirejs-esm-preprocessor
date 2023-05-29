@@ -78,14 +78,18 @@ export async function startServer(options = {}, server, secureServer, handler) {
     port: securePort = +(process.env.SECURE_PORT || 9876)
   } = secureOptions
   const browserHost = host === '0.0.0.0' ? 'localhost' : host
+  let successCount = 1
 
+  if (handler === undefined) handler = options.handler
   if (!handler) handler = createHandler(options)
 
-  let successCount = 1
+  if (server === undefined) server = options.server
   if (!server && server !== false) {
     server = createServer(options, handler)
     ++successCount
   }
+
+  if (secureServer === undefined) secureServer = options.secureServer
   if (!secureServer && secureServer !== false) {
     secureServer = await createSecureServer(options, handler)
     ++successCount
