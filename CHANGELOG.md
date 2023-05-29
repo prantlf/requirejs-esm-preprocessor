@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.4.0...v1.4.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* Disabling insecure and secure servers on the command line did not work ([5bc3069](https://github.com/prantlf/requirejs-esm-preprocessor/commit/5bc3069551415122e9207901578252d0a55207af))
+
 # [1.4.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.3.1...v1.4.0) (2023-05-10)
 
 
