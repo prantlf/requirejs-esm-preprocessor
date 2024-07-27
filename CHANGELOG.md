@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.4.1...v1.5.0) (2024-07-27)
+
+### Features
+
+* Upgrade dependencies ([ac6054a](https://github.com/prantlf/requirejs-esm-preprocessor/commit/ac6054a837869a8eee9e0fb1763af282c7baa836))
+
 ## [1.4.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.4.0...v1.4.1) (2023-05-29)
 
 
