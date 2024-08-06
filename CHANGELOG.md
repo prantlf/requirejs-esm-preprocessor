@@ -1,10 +1,20 @@
 # Changes
 
+## [2.0.0](https://github.com/prantlf/requirejs-esm/compare/v1.5.0...v2.0.0) (2024-08-06)
+
+### Bug Fixes
+
+* Re-release 1.5.0 as 2.0.0 because of a breaking change ([46031f6](https://github.com/prantlf/requirejs-esm/commit/46031f63ac081ad44c5facc7fcd256f4eff4ce99))
+
+### BREAKING CHANGES
+
+The minimum version of Node.js is 18 from now on.
+
 ## [1.5.1](https://github.com/prantlf/requirejs-esm/compare/v1.4.1...v1.5.1) (2024-08-06)
 
 ### Bug Fixes
 
-* Re-release 1.4.1 to fix a breaking change in 1.5.0 ([7eace04](https://github.com/prantlf/requirejs-esm/commit/7eace04f757c7a436a369db787935422f519d2de))
+* Re-release 1.4.1 to fix a breaking change in 1.5.0 ([a4283a1](https://github.com/prantlf/requirejs-esm/commit/a4283a111665a5beb64ae056c02b3e064de8c701))
 
 ## [1.5.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.4.1...v1.5.0) (2024-07-27)
 
