@@ -1,6 +1,6 @@
 {
   "name": "requirejs-esm-preprocessor",
-  "version": "1.4.1",
+  "version": "1.5.1",
   "description": "Preprocessor of JavaScript modules in RequireJS projects converting ESM to AMD.",
   "author": "Ferdinand Prantl <prantlf@gmail.com>",
   "license": "MIT",
@@ -79,7 +79,7 @@
     "mime": "^3.0.0",
     "morgan": "^1.10.0",
     "polka": "^0.5.2",
-    "requirejs-esm": "^2.3.1",
+    "requirejs-esm": "^2.4.2",
     "serve-index": "^1.9.1"
   },
   "devDependencies": {
