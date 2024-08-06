@@ -1,5 +1,11 @@
 # Changes
 
+## [1.5.1](https://github.com/prantlf/requirejs-esm/compare/v1.4.1...v1.5.1) (2024-08-06)
+
+### Bug Fixes
+
+* Re-release 1.4.1 to fix a breaking change in 1.5.0 ([7eace04](https://github.com/prantlf/requirejs-esm/commit/7eace04f757c7a436a369db787935422f519d2de))
+
 ## [1.5.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v1.4.1...v1.5.0) (2024-07-27)
 
 ### Features

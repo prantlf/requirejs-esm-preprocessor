@@ -24,8 +24,8 @@ importers:
         specifier: ^0.5.2
         version: 0.5.2
       requirejs-esm:
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^3.0.0
+        version: 3.0.0
       serve-index:
         specifier: ^1.9.1
         version: 1.9.1
@@ -892,9 +892,9 @@ packages:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
 
-  requirejs-esm@2.4.0:
-    resolution: {integrity: sha512-qDPr15pnYwM26kL9BVqIvxPP3QO8IV1vLpbk/DWhLDwvr0jnIJhp0VqbSp9QVPYnkwlIOejqXIeHxN10o131pw==}
-    engines: {node: '>=14'}
+  requirejs-esm@3.0.0:
+    resolution: {integrity: sha512-GqjJwjUFJeXMxkC2BBv7Sme8HMqePdXTtQLY85ySIq1/tflk8zXuxvXFb0Yc6BGRzlsZYq9H4KU1DUAx3ugQ/A==}
+    engines: {node: '>=18'}
     hasBin: true
 
   resolve-from@4.0.0:
@@ -1846,7 +1846,7 @@ snapshots:
 
   require-directory@2.1.1: {}
 
-  requirejs-esm@2.4.0:
+  requirejs-esm@3.0.0:
     dependencies:
       '@prantlf/convert-source-map': 2.0.0
       astring: 1.8.6
