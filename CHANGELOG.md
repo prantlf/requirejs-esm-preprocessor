@@ -1,5 +1,15 @@
 # Changes
 
+## [3.0.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v2.1.1...v3.0.0) (2025-11-09)
+
+### Features
+
+* Insert "use strict" to output AMD code by default ([ba6e047](https://github.com/prantlf/requirejs-esm-preprocessor/commit/ba6e04735f2f58bd281e6554cc2b7f996515de43))
+
+### BREAKING CHANGES
+
+Each AMD module output will start with `"use strict"` by default from now on. ESM execution mode is strict by default. Comply to this in the output AMD code too. If you use a module bundler, which inserts `"use strict"` to the outer scope, you can set the `useStrict` flag to `false` to avoid inserting `"use strict"` to each inner AMD module.
+
 ## [2.1.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v2.1.0...v2.1.1) (2025-05-14)
 
 ### Bug Fixes
