@@ -11,7 +11,7 @@ import { preprocessor } from './preprocessor'
 export function createHandler(options = {}) {
   const {
     root = '.', isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
-    dirMap, appDir, needsResolve, sourceMap, logOptions = {},
+    dirMap, appDir, needsResolve, useStrict, sourceMap, logOptions = {},
     leadingHandlers = [], middleHandlers = [], trailingHandlers = [], favicon
   } = options
   const {
@@ -31,8 +31,9 @@ export function createHandler(options = {}) {
   if (!favicon) server.use(blockFavicon())
   server
     .use(preprocessor({
-      root, isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
-      dirMap, appDir, needsResolve, sourceMap, verbose: transforms, silent
+      root, isScript, scriptsOnly, fallthrough, cache, setHeaders,
+      resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap,
+      verbose: transforms, silent
     }))
     .use(serveIndex(root))
   /* c8 ignore next */

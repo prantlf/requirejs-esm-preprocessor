@@ -14,7 +14,9 @@ test.before(async () => {
     });
   ({ server } = await startServer({ host: 'localhost' }, null, false, handler))
 })
-test.after(() => server.close())
+test.after(async () => {
+  await server.close()
+})
 
 function request(path, { method = 'GET', headers } = {}) {
   return new Promise((resolve, reject) =>

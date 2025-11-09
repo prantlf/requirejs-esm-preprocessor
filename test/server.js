@@ -107,9 +107,10 @@ test('serves an ESM script', async () => {
   const { res, data } = await request('/demo-local/src/sum.js')
   equal(res.statusCode, 200)
   equal(data, `define(function () {
+  "use strict";
   return (a, b) => a + b;
 });
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9kZW1vLWxvY2FsL3NyYy9zdW0uanMiXSwibmFtZXMiOlsiYSIsImIiXSwibWFwcGluZ3MiOiI7U0FBZSxDQUFDQSxHQUFHQyxNQUFNRCxJQUFJQyIsImZpbGUiOiIvZGVtby1sb2NhbC9zcmMvc3VtLmpzIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlZmF1bHQgKGEsIGIpID0+IGEgKyBiXG4iXX0=`)
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9kZW1vLWxvY2FsL3NyYy9zdW0uanMiXSwibmFtZXMiOlsiYSIsImIiXSwibWFwcGluZ3MiOiI7O1NBQWUsQ0FBQ0EsR0FBR0MsTUFBTUQsSUFBSUMiLCJmaWxlIjoiL2RlbW8tbG9jYWwvc3JjL3N1bS5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IChhLCBiKSA9PiBhICsgYlxuIl19`)
 })
 
 test('serves an AMD script', async () => {

@@ -23,7 +23,8 @@ type IsScript = (path: string) => boolean
 declare function preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): string
+  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  verbose?: boolean, silent?: boolean }): string
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
 
@@ -36,13 +37,15 @@ declare function serveScript(req: http.OutgoingMessage, res: http.IncomingMessag
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): void
+  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  verbose?: boolean, silent?: boolean }): void
 declare function preprocessor(options?: {
   root?: string /*= '.' */, scriptsOnly?: boolean, fallthrough?: boolean,
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  sourceMap?: boolean /*= true */, verbose?: boolean, silent?: boolean }): Handler
+  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  verbose?: boolean, silent?: boolean }): Handler
 
 interface BaseOptions {
   root?: string /*= '.' */
@@ -97,6 +100,7 @@ interface ServerOptions extends BaseOptions {
   scriptsOnly?: boolean
   dirMap?: DirMap
   appDir?: string
+  useStrict?: boolean /*= true*/
   sourceMap?: boolean /*= true */
   needsResolve?: NeedsResolve
   resolvePath?: ResolvePath /*= false */

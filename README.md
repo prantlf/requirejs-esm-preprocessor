@@ -1,12 +1,8 @@
 # ESM to AMD Preprocessor for RequireJS
 
-[![Latest version](https://img.shields.io/npm/v/requirejs-esm-preprocessor)
- ![Dependency status](https://img.shields.io/librariesio/release/npm/requirejs-esm-preprocessor)
-](https://www.npmjs.com/package/requirejs-esm-preprocessor)
-
 A preprocessor of JavaScript modules in [RequireJS] projects converting ESM to AMD. It takes care only of the module format; it does not transpile the language and that is why it is [a lot faster] than plugins using [Babel]. If you need to transpile the code to an earlier ECMAScript version, have a look at [requirejs-babel7].
 
-A file preprocessor is a lot less intrusive than a RequireJS plugin. However, it requires a pluggable development web server, so that a plugin (compatible with [connect middleware]) can be registered in it. The production web server has not limitations, because the bundled output of [RequireJS optimizer] contains AMD modules. (Preprocessing takes place in the `onBuildRead` callback.) Have look at [requirejs-esm] if you are looking for a RequireJS plugin withtou these limitations.
+A file preprocessor is a lot less intrusive than a RequireJS plugin. However, it requires a pluggable development web server, so that a plugin (compatible with [connect middleware]) can be registered in it. The production web server has not limitations, because the bundled output of [RequireJS optimizer] contains AMD modules. (Preprocessing takes place in the `onBuildRead` callback.) Have look at [requirejs-esm] if you are looking for a RequireJS plugin without these limitations.
 
 The official [RequireJS optimizer] (`r.js`) does not wire up source maps from the original (not transpiled) sources to the source map of the output bundle. It makes this or similar preprocessors unfeasible for serious work. If you want the proper support for source maps, replace the official optimizer package ([`requirejs`]) with the forked [`@prantlf/requirejs`], which is fixed.
 
@@ -150,7 +146,8 @@ type IsScript = (path: string) => boolean
 preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): string
+  useStrict?: boolean = true, sourceMap?: boolean = true,
+  verbose?: boolean, silent?: boolean }): string
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
 
@@ -158,20 +155,28 @@ serveFile(req: http.OutgoingMessage, res: http.IncomingMessage, path: string) :v
 serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): void
+  useStrict?: boolean = true, sourceMap?: boolean = true,
+  verbose?: boolean, silent?: boolean }): void
 preprocessor(options?: {
   root?: string = '.', scriptsOnly?: boolean, fallthrough?: boolean,
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  sourceMap?: boolean = true, verbose?: boolean, silent?: boolean }): Handler
+  useStrict?: boolean = true, sourceMap?: boolean = true,
+  verbose?: boolean, silent?: boolean }): Handler
 
 interface ServerOptions {
-  root?: string = '.', isScript?: IsScript, scriptsOnly?: boolean
+  root?: string = '.'
+  isScript?: IsScript
+  scriptsOnly?: boolean
   host: string = process.env.HOST || '0.0.0.0'
   port: number = process.env.PORT || 8967
-  dirMap?: DirMap, appDir?: string, sourceMap?: boolean = true
-  needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false
+  dirMap?: DirMap
+  appDir?: string
+  useStrict?: boolean = true
+  sourceMap?: boolean = true
+  needsResolve?: NeedsResolve
+  resolvePath?: ResolvePath = false
   secureOptions?: {
     port: number = process.env.SECURE_PORT || 9876
     key?: string | Blob | Buffer = 'dist/certificates/localhost.key'
@@ -179,8 +184,11 @@ interface ServerOptions {
     allowHTTP1?: boolean = true
   }
   logOptions?: {
-    format?: string = 'dev', errorsOnly?: boolean = true
-    servedOnly?: boolean = true, transforms?: boolean, silent?: boolean
+    format?: string = 'dev'
+    errorsOnly?: boolean = true
+    servedOnly?: boolean = true
+    transforms?: boolean
+    silent?: boolean
   }
   leadingHandlers?: Handler[]
   middleHandlers?: Handler[]

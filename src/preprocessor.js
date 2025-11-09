@@ -113,15 +113,15 @@ export async function serveFile(req, res, options) {
 
 export async function serveScript(req, res, {
   cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-  needsResolve, sourceMap, verbose, silent
+  needsResolve, useStrict, sourceMap, verbose, silent
 }) {
   const stats = await checkStats(req, res, fullPath, cache)
   const { mtime } = stats
   if (!mtime) return
   const contents = await readFile(fullPath, 'utf8')
   const code = preprocess({
-    path, contents,
-    resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+    path, contents, resolvePath, dirMap, appDir,
+    needsResolve, useStrict, sourceMap, verbose, silent
   })
   const bytes = Buffer.from(code)
   const { length } = bytes
@@ -136,7 +136,7 @@ function endsWithJS(path) {
 
 export function preprocessor({
   root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
-  resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+  resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap, verbose, silent
 } = {}) {
   return async function (req, res, next) {
     const path = cutQuery(req.url)
@@ -145,8 +145,8 @@ export function preprocessor({
       let out
       if (isScript(path)) {
         out = await serveScript(req, res, {
-          cache, setHeaders, path, fullPath,
-          resolvePath, dirMap, appDir, needsResolve, sourceMap, verbose, silent
+          cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
+          needsResolve, useStrict, sourceMap, verbose, silent
         })
       } else if (!scriptsOnly) {
         out = await serveFile(req, res, { cache, setHeaders, fullPath })

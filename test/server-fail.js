@@ -11,5 +11,6 @@ test('fails on a port already taken', async () =>
     } finally {
       ok(server)
       await server.close()
+      await new Promise(resolve => setTimeout(resolve, 4000))
     }
   }))
