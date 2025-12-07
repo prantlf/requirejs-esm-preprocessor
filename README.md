@@ -134,6 +134,21 @@ interface ResolveOptions {
   needsResolve?: NeedsResolve
 }
 
+interface AmdOptions {
+  namespace?: Record<string, unknown>
+  func: Record<string, unknown>
+  name: string
+  deps?: string[]
+  params?: string[]
+  factory?: Record<string, unknown>
+  output?: Record<string, unknown>
+}
+
+type OnBeforeTransform = (options: OnBeforeTransformOptions) => void
+type OnAfterTransform = (options: OnAfterTransformOptions) => void
+type OnBeforeUpdate = (options: AmdOptions) => boolean
+type OnAfterUpdate = (options: AmdOptions) => boolean
+
 resolvePath(sourcePath: string, currentFile: string, options?: ResolveOptions): string
 
 rebasePath(path: string, dirMap?: DirMap): string
@@ -147,6 +162,8 @@ preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   useStrict?: boolean = true, sourceMap?: boolean = true,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): string
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
@@ -156,6 +173,8 @@ serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   useStrict?: boolean = true, sourceMap?: boolean = true,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): void
 preprocessor(options?: {
   root?: string = '.', scriptsOnly?: boolean, fallthrough?: boolean,
@@ -163,6 +182,8 @@ preprocessor(options?: {
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
   useStrict?: boolean = true, sourceMap?: boolean = true,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): Handler
 
 interface ServerOptions {
@@ -177,6 +198,10 @@ interface ServerOptions {
   sourceMap?: boolean = true
   needsResolve?: NeedsResolve
   resolvePath?: ResolvePath = false
+  onBeforeTransform?: OnBeforeTransform
+  onAfterTransform?: OnAfterTransform
+  onBeforeUpdate?: OnBeforeUpdate
+  onAfterUpdate?: OnAfterUpdate
   secureOptions?: {
     port: number = process.env.SECURE_PORT || 9876
     key?: string | Blob | Buffer = 'dist/certificates/localhost.key'
@@ -197,6 +222,14 @@ interface ServerOptions {
   server?: http.Server | false
   secureServer?: http.Server | false
   handler?: Handler
+}
+
+interface OnBeforeTransformOptions extends ServerOptions {
+  program: Record<string, unknown>
+}
+
+interface OnAfterTransformOptions extends OnBeforeTransformOptions {
+  callbackBody: Record<string, unknown>[]
 }
 
 defaultUsage(): void

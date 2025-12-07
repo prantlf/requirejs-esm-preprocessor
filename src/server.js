@@ -12,6 +12,7 @@ export function createHandler(options = {}) {
   const {
     root = '.', isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
     dirMap, appDir, needsResolve, useStrict, sourceMap, logOptions = {},
+    onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
     leadingHandlers = [], middleHandlers = [], trailingHandlers = [], favicon
   } = options
   const {
@@ -33,6 +34,7 @@ export function createHandler(options = {}) {
     .use(preprocessor({
       root, isScript, scriptsOnly, fallthrough, cache, setHeaders,
       resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap,
+      onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
       verbose: transforms, silent
     }))
     .use(serveIndex(root))

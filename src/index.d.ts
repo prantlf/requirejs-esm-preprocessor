@@ -11,6 +11,16 @@ interface ResolveOptions {
   needsResolve?: NeedsResolve
 }
 
+interface AmdOptions {
+  namespace?: Record<string, unknown>
+  func: Record<string, unknown>
+  name: string
+  deps?: string[]
+  params?: string[]
+  factory?: Record<string, unknown>
+  output?: Record<string, unknown>
+}
+
 declare function resolvePath(sourcePath: string, currentFile: string, options?: ResolveOptions): string
 
 declare function rebasePath(path: string, dirMap?: DirMap): string
@@ -18,12 +28,18 @@ declare function rebaseMap(map: object, dirMap?: DirMap): void
 declare function rebaseMapFile(file: string, dirMap?: DirMap): void
 
 type ResolvePath = ((sourcePath: string, currentFile: string, options?: ResolveOptions) => string) | false
+type OnBeforeTransform = (options: OnBeforeTransformOptions) => void
+type OnAfterTransform = (options: OnAfterTransformOptions) => void
+type OnBeforeUpdate = (options: AmdOptions) => boolean
+type OnAfterUpdate = (options: AmdOptions) => boolean
 type IsScript = (path: string) => boolean
 
 declare function preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): string
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
@@ -38,6 +54,8 @@ declare function serveScript(req: http.OutgoingMessage, res: http.IncomingMessag
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): void
 declare function preprocessor(options?: {
   root?: string /*= '.' */, scriptsOnly?: boolean, fallthrough?: boolean,
@@ -45,6 +63,8 @@ declare function preprocessor(options?: {
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
+  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
+  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): Handler
 
 interface BaseOptions {
@@ -104,6 +124,11 @@ interface ServerOptions extends BaseOptions {
   sourceMap?: boolean /*= true */
   needsResolve?: NeedsResolve
   resolvePath?: ResolvePath /*= false */
+  onBeforeTransform?: OnBeforeTransform
+  onAfterTransform?: OnAfterTransform
+  onBeforeUpdate?: OnBeforeUpdate
+  onAfterUpdate?: OnAfterUpdate
+  needsResolve?: NeedsResolve
   secureOptions?: SecureOptions
   logOptions?: LogOptions
   leadingHandlers?: Handler[]
@@ -113,6 +138,14 @@ interface ServerOptions extends BaseOptions {
   server?: http.Server | false
   secureServer?: http.Server | false
   handler?: Handler
+}
+
+interface OnBeforeTransformOptions extends ServerOptions {
+  program: Record<string, unknown>
+}
+
+interface OnAfterTransformOptions extends OnBeforeTransformOptions {
+  callbackBody: Record<string, unknown>[]
 }
 
 declare function createHandler(options?: ServerOptions): Handler

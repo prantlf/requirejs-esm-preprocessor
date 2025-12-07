@@ -11,8 +11,8 @@ function cutQuery(url) {
 }
 
 function inferStatus(err) {
+  /* c8 ignore next 4 */
   if (err.code === 'ENOENT') return 404
-  /* c8 ignore next 3 */
   console.error(err)
   return 500
 }
@@ -113,7 +113,8 @@ export async function serveFile(req, res, options) {
 
 export async function serveScript(req, res, {
   cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-  needsResolve, useStrict, sourceMap, verbose, silent
+  needsResolve, useStrict, sourceMap, verbose, silent,
+  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
 }) {
   const stats = await checkStats(req, res, fullPath, cache)
   const { mtime } = stats
@@ -121,7 +122,8 @@ export async function serveScript(req, res, {
   const contents = await readFile(fullPath, 'utf8')
   const code = preprocess({
     path, contents, resolvePath, dirMap, appDir,
-    needsResolve, useStrict, sourceMap, verbose, silent
+    needsResolve, useStrict, sourceMap, verbose, silent,
+    onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
   })
   const bytes = Buffer.from(code)
   const { length } = bytes
@@ -136,7 +138,8 @@ function endsWithJS(path) {
 
 export function preprocessor({
   root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
-  resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap, verbose, silent
+  resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap, verbose, silent,
+  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
 } = {}) {
   return async function (req, res, next) {
     const path = cutQuery(req.url)
@@ -146,7 +149,8 @@ export function preprocessor({
       if (isScript(path)) {
         out = await serveScript(req, res, {
           cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-          needsResolve, useStrict, sourceMap, verbose, silent
+          needsResolve, useStrict, sourceMap, verbose, silent,
+          onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
         })
       } else if (!scriptsOnly) {
         out = await serveFile(req, res, { cache, setHeaders, fullPath })
