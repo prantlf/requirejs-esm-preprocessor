@@ -1,5 +1,11 @@
 # Changes
 
+## [3.1.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.0.0...v3.1.0) (2025-12-07)
+
+### Features
+
+* Support transformation and opdating hooks ([a25e233](https://github.com/prantlf/requirejs-esm-preprocessor/commit/a25e233e16a7519e7b18c1f8f6dab1f9b3f72dd6))
+
 ## [3.0.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v2.1.1...v3.0.0) (2025-11-09)
 
 ### Features
