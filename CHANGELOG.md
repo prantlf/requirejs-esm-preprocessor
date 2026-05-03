@@ -1,5 +1,12 @@
 # Changes
 
+## [3.3.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.2.0...v3.3.0) (2026-05-03)
+
+### Features
+
+* Upgrade dependencies ([880de43](https://github.com/prantlf/requirejs-esm-preprocessor/commit/880de430a7c7f15408127a19184d89e8ecc4f375))
+* Pass skipIfNoImportExport to require-esm ([81c85ee](https://github.com/prantlf/requirejs-esm-preprocessor/commit/81c85ee4a116678ddc0ae3fecc7199044dc58001))
+
 ## [3.2.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.1.0...v3.2.0) (2025-12-07)
 
 ### Features
