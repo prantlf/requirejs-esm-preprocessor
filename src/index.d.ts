@@ -37,6 +37,7 @@ type IsScript = (path: string) => boolean
 declare function preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
+  skipIfNoImportExport?: boolean /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
@@ -53,6 +54,7 @@ declare function serveScript(req: http.OutgoingMessage, res: http.IncomingMessag
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
+  skipIfNoImportExport?: boolean /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
@@ -62,6 +64,7 @@ declare function preprocessor(options?: {
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
+  skipIfNoImportExport?: boolean /*= false */,
   useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
@@ -124,6 +127,7 @@ interface ServerOptions extends BaseOptions {
   sourceMap?: boolean /*= true */
   needsResolve?: NeedsResolve
   resolvePath?: ResolvePath /*= false */
+  skipIfNoImportExport?: boolean /*= false */
   onBeforeTransform?: OnBeforeTransform
   onAfterTransform?: OnAfterTransform
   onBeforeUpdate?: OnBeforeUpdate

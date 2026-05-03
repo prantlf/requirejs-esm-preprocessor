@@ -15,6 +15,7 @@ export default function preprocess({
   needsResolve,
   resolvePath = false,
   useStrict = true,
+  skipIfNoImportExport,
   onBeforeTransform,
   onAfterTransform,
   onBeforeUpdate,
@@ -28,6 +29,7 @@ export default function preprocess({
   const start = performance.now()
   try {
     const { code, updated } = transform(contents, path, {
+      skipIfNoImportExport,
       useStrict,
       sourceMap,
       resolvePath,

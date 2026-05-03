@@ -11,9 +11,10 @@ import { preprocessor } from './preprocessor'
 export function createHandler(options = {}) {
   const {
     root = '.', isScript, scriptsOnly, fallthrough, cache, setHeaders, resolvePath,
-    dirMap, appDir, needsResolve, useStrict, sourceMap, logOptions = {},
+    dirMap, appDir, needsResolve, useStrict = true, sourceMap = true,
     onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-    leadingHandlers = [], middleHandlers = [], trailingHandlers = [], favicon
+    leadingHandlers = [], middleHandlers = [], trailingHandlers = [],
+    skipIfNoImportExport, logOptions = {}, favicon
   } = options
   const {
     format = 'dev', errorsOnly = true, servedOnly = true, transforms, silent
@@ -33,9 +34,9 @@ export function createHandler(options = {}) {
   server
     .use(preprocessor({
       root, isScript, scriptsOnly, fallthrough, cache, setHeaders,
-      resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap,
+      resolvePath, dirMap, appDir, needsResolve, skipIfNoImportExport,
       onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-      verbose: transforms, silent
+      useStrict, sourceMap, verbose: transforms, silent
     }))
     .use(serveIndex(root))
   /* c8 ignore next */

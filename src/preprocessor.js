@@ -113,8 +113,9 @@ export async function serveFile(req, res, options) {
 
 export async function serveScript(req, res, {
   cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-  needsResolve, useStrict, sourceMap, verbose, silent,
-  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
+  needsResolve, skipIfNoImportExport, useStrict = true, sourceMap = true,
+  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
+  verbose, silent
 }) {
   const stats = await checkStats(req, res, fullPath, cache)
   const { mtime } = stats
@@ -122,8 +123,9 @@ export async function serveScript(req, res, {
   const contents = await readFile(fullPath, 'utf8')
   const code = preprocess({
     path, contents, resolvePath, dirMap, appDir,
-    needsResolve, useStrict, sourceMap, verbose, silent,
-    onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
+    needsResolve, skipIfNoImportExport, useStrict, sourceMap,
+    onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
+    verbose, silent
   })
   const bytes = Buffer.from(code)
   const { length } = bytes
@@ -138,7 +140,8 @@ function endsWithJS(path) {
 
 export function preprocessor({
   root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
-  resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap, verbose, silent,
+  resolvePath, dirMap, appDir, needsResolve, skipIfNoImportExport,
+  useStrict = true, sourceMap = true, verbose, silent,
   onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
 } = {}) {
   return async (req, res, next) => {
@@ -149,7 +152,7 @@ export function preprocessor({
       if (isScript(path)) {
         out = await serveScript(req, res, {
           cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-          needsResolve, useStrict, sourceMap, verbose, silent,
+          needsResolve, skipIfNoImportExport, useStrict, sourceMap, verbose, silent,
           onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
         })
       } else if (!scriptsOnly) {
