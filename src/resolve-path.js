@@ -1,4 +1,4 @@
-import { dirname, normalize } from 'path'
+import { dirname, normalize } from 'node:path'
 import { rebasePath } from './rebase-map'
 
 export function resolvePath(sourcePath, currentFile, { dirMap, needsResolve } = {}) {

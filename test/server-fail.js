@@ -1,4 +1,4 @@
-const { ok, rejects } = require('assert')
+const { ok, rejects } = require('node:assert')
 const test = require('tehanu')(__filename)
 const { startServer } = require('../dist/cjs')
 

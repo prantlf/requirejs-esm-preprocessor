@@ -1,4 +1,4 @@
-const { strictEqual, deepStrictEqual } = require('assert')
+const { strictEqual, deepStrictEqual } = require('node:assert')
 const test = require('tehanu')(__filename)
 const { configure, defaultUsage, defaultUnknownArg } = require('../dist/cjs')
 

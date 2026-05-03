@@ -1,4 +1,4 @@
-const { equal } = require('assert')
+const { equal } = require('node:assert')
 const test = require('tehanu')(__filename)
 const { resolvePath } = require('../dist/cjs')
 

@@ -1,7 +1,7 @@
-import { createReadStream } from 'fs'
-import { readFile, stat } from 'fs/promises'
-import { join } from 'path'
-import { STATUS_CODES } from 'http'
+import { createReadStream } from 'node:fs'
+import { readFile, stat } from 'node:fs/promises'
+import { join } from 'node:path'
+import { STATUS_CODES } from 'node:http'
 import { getType } from 'mime'
 import preprocess from './preprocess'
 
@@ -17,7 +17,7 @@ function inferStatus(err) {
   return 500
 }
 
-function serveError(req, res, code, text) {
+function serveError(_req, res, code, text) {
   if (code instanceof Error) code = inferStatus(code)
   res.writeHead(code, { 'content-type': 'text/plain' })
   res.end(text || STATUS_CODES[code])
@@ -75,16 +75,16 @@ function serveHeaders(req, res, path, size, stats, setHeaders) {
       serveError(req, res, 416)
       return { failed: true }
     }
-    setHeaders && setHeaders(res, path, stats)
+    setHeaders?.(res, path, stats)
     res.writeHead(206, { ...rangeHeaders, ...headers })
     return { start, end }
   }
-  setHeaders && setHeaders(res, path, stats)
+  setHeaders?.(res, path, stats)
   res.writeHead(200, { 'content-length': size, ...headers })
   return {}
 }
 
-function serveInfo(req, res, path, mtime, size) {
+function serveInfo(_req, res, path, mtime, size) {
   const headers = createHeaders(path, mtime)
   res.writeHead(200, { 'content-length': size, ...headers })
   res.end()
@@ -141,7 +141,7 @@ export function preprocessor({
   resolvePath, dirMap, appDir, needsResolve, useStrict, sourceMap, verbose, silent,
   onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
 } = {}) {
-  return async function (req, res, next) {
+  return async (req, res, next) => {
     const path = cutQuery(req.url)
     const fullPath = join(root, path)
     try {
@@ -157,7 +157,7 @@ export function preprocessor({
       } else {
         return next()
       }
-      if (out && out.next) next()
+      if (out?.next) next()
     } catch (err) {
       if (fallthrough) {
         next()

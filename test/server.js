@@ -1,6 +1,6 @@
-const { readFile } = require('fs/promises')
-const protocols = { http: require('http'), https: require('http') }
-const { ok, equal } = require('assert')
+const { readFile } = require('node:fs/promises')
+const protocols = { http: require('node:http'), https: require('node:http') }
+const { ok, equal } = require('node:assert')
 const test = require('tehanu')(__filename)
 const { createServer, createSecureServer, startServer } = require('../dist/cjs')
 

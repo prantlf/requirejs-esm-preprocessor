@@ -1,6 +1,6 @@
-const http = require('http')
+const http = require('node:http')
 const polka = require('polka')
-const { equal } = require('assert')
+const { equal } = require('node:assert')
 const test = require('tehanu')(__filename)
 const { preprocessor, startServer } = require('../dist/cjs')
 
@@ -8,7 +8,7 @@ let server
 test.before(async () => {
   const { handler } = polka()
     .use(preprocessor({ fallthrough: false, cache: false }))
-    .use((req, res) => {
+    .use((_req, res) => {
       res.writeHead(201)
       res.end('test')
     });

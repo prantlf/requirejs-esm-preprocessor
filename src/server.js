@@ -1,6 +1,6 @@
-import { readFile } from 'fs/promises'
-import http from 'http'
-import http2 from 'http2'
+import { readFile } from 'node:fs/promises'
+import http from 'node:http'
+import http2 from 'node:http2'
 import polka from 'polka'
 import morgan from 'morgan'
 import cors from 'cors'
@@ -23,7 +23,7 @@ export function createHandler(options = {}) {
   for (const handler of leadingHandlers) server.use(handler)
   server
     .use(morgan(format, {
-      skip: (req, { statusCode }) => silent || errorsOnly && statusCode < 400 ||
+      skip: (_req, { statusCode }) => silent || errorsOnly && statusCode < 400 ||
         servedOnly && statusCode >= 300 && statusCode < 400
     }))
     .use(cors())
@@ -77,7 +77,7 @@ export async function startServer(options = {}, server, secureServer, handler) {
   const {
     silent
   } = logOptions
-  let {
+  const {
     port: securePort = +(process.env.SECURE_PORT || 9876)
   } = secureOptions
   const browserHost = host === '0.0.0.0' ? 'localhost' : host
