@@ -161,7 +161,8 @@ type IsScript = (path: string) => boolean
 preprocess(options?: {
   path: string, contents: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  skipIfNoImportExport?: boolean = false, useStrict?: boolean = true, sourceMap?: boolean = true,
+  skipIfNoImportExport?: boolean = false, splitDefaultNamedDeclarations?: boolean = false,
+  useStrict?: boolean = true, sourceMap?: boolean = true,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): string
@@ -172,7 +173,8 @@ serveFile(req: http.OutgoingMessage, res: http.IncomingMessage, path: string) :v
 serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
   path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  skipIfNoImportExport?: boolean = false, useStrict?: boolean = true, sourceMap?: boolean = true,
+  skipIfNoImportExport?: boolean = false, splitDefaultNamedDeclarations?: boolean = false,
+  useStrict?: boolean = true, sourceMap?: boolean = true,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): void
@@ -181,7 +183,8 @@ preprocessor(options?: {
   setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
   cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
   needsResolve?: NeedsResolve, resolvePath?: ResolvePath = false,
-  skipIfNoImportExport?: boolean = false, useStrict?: boolean = true, sourceMap?: boolean = true,
+  skipIfNoImportExport?: boolean = false, splitDefaultNamedDeclarations?: boolean = false,
+  useStrict?: boolean = true, sourceMap?: boolean = true,
   onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
   onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
   verbose?: boolean, silent?: boolean }): Handler
@@ -196,6 +199,7 @@ interface ServerOptions {
   appDir?: string
   skipIfNoImportExport?: boolean = false,
   useStrict?: boolean = true
+  splitDefaultNamedDeclarations?: boolean = false,
   sourceMap?: boolean = true
   needsResolve?: NeedsResolve
   resolvePath?: ResolvePath = false

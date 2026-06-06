@@ -113,7 +113,8 @@ export async function serveFile(req, res, options) {
 
 export async function serveScript(req, res, {
   cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-  needsResolve, skipIfNoImportExport, useStrict = true, sourceMap = true,
+  needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
+  useStrict = true, sourceMap = true,
   onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
   verbose, silent
 }) {
@@ -123,7 +124,8 @@ export async function serveScript(req, res, {
   const contents = await readFile(fullPath, 'utf8')
   const code = preprocess({
     path, contents, resolvePath, dirMap, appDir,
-    needsResolve, skipIfNoImportExport, useStrict, sourceMap,
+    needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
+    useStrict, sourceMap,
     onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
     verbose, silent
   })
@@ -141,8 +143,9 @@ function endsWithJS(path) {
 export function preprocessor({
   root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
   resolvePath, dirMap, appDir, needsResolve, skipIfNoImportExport,
-  useStrict = true, sourceMap = true, verbose, silent,
-  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
+  splitDefaultNamedDeclarations, useStrict = true, sourceMap = true,
+  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
+  verbose, silent
 } = {}) {
   return async (req, res, next) => {
     const path = cutQuery(req.url)
@@ -152,8 +155,10 @@ export function preprocessor({
       if (isScript(path)) {
         out = await serveScript(req, res, {
           cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-          needsResolve, skipIfNoImportExport, useStrict, sourceMap, verbose, silent,
-          onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate
+          needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
+          useStrict, sourceMap,
+          onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
+          verbose, silent
         })
       } else if (!scriptsOnly) {
         out = await serveFile(req, res, { cache, setHeaders, fullPath })

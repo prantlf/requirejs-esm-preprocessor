@@ -16,6 +16,7 @@ export default function preprocess({
   resolvePath = false,
   useStrict = true,
   skipIfNoImportExport,
+  splitDefaultNamedDeclarations,
   onBeforeTransform,
   onAfterTransform,
   onBeforeUpdate,
@@ -31,6 +32,7 @@ export default function preprocess({
     const { code, updated } = transform(contents, path, {
       skipIfNoImportExport,
       useStrict,
+      splitDefaultNamedDeclarations,
       sourceMap,
       resolvePath,
       onBeforeTransform,
