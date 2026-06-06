@@ -71,23 +71,23 @@
     "connect-block-favicon": "^1.1.0",
     "cors": "^2.8.6",
     "mime": "^3.0.0",
-    "morgan": "^1.10.1",
+    "morgan": "^1.11.0",
     "polka": "^0.5.2",
-    "requirejs-esm": "^4.3.0",
+    "requirejs-esm": "^4.4.0",
     "serve-index": "^1.9.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.14",
-    "@prantlf/requirejs": "^3.3.1",
+    "@biomejs/biome": "^2.4.16",
+    "@prantlf/requirejs": "^3.4.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "c8": "^11.0.0",
     "lit-html": "^1",
-    "rollup": "^4.60.2",
+    "rollup": "^4.61.1",
     "rollup-plugin-copy": "^3.5.0",
     "tehanu": "^1.0.1",
     "tehanu-repo-coco": "^1.0.1",
     "tehanu-teru": "^1.0.1",
-    "terser": "^5.46.2"
+    "terser": "^5.48.0"
   },
   "keywords": [
     "requirejs",
