@@ -1,5 +1,12 @@
 # Changes
 
+## [3.4.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.3.0...v3.4.0) (2026-06-06)
+
+### Features
+
+* Upgrade dependencies ([ff615fa](https://github.com/prantlf/requirejs-esm-preprocessor/commit/ff615fa29b741392c0a35105eefecb2d7002119f))
+* Propagate option splitDefaultNamedDeclarations to requirejs-esm ([392d482](https://github.com/prantlf/requirejs-esm-preprocessor/commit/392d4828408c2301f893bf8c2ec589fcde618ba2))
+
 ## [3.3.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.2.0...v3.3.0) (2026-05-03)
 
 ### Features
