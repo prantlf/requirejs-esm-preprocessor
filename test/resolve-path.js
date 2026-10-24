@@ -1,6 +1,8 @@
-const { equal } = require('node:assert')
-const test = require('tehanu')(__filename)
-const { resolvePath } = require('../dist/cjs')
+import { equal } from 'node:assert'
+import tehanu from 'tehanu'
+import { resolvePath } from '../src/index.js'
+
+const test = tehanu(import.meta.filename)
 
 test('ignores special RequireJS modules', () => {
   equal(resolvePath('require', ''), 'require')
@@ -11,10 +13,12 @@ test('ignores special RequireJS modules', () => {
 test('ignores dependencies using plugins', () =>
   equal(resolvePath('text!test.txt', ''), 'text!test.txt'))
 
-test('resolves a relative path', () =>
-  equal(resolvePath('../second', 'parent/first'), 'second'))
+test('resolves a relative path', () => equal(resolvePath('../second', 'parent/first'), 'second'))
 
 test('leaves a path intact is requested', () =>
-  equal(resolvePath('./second', 'parent/first', {
-    needsResolve: sourcePath => sourcePath !== './second'
-  }), './second'))
+  equal(
+    resolvePath('./second', 'parent/first', {
+      needsResolve: sourcePath => sourcePath !== './second'
+    }),
+    './second'
+  ))

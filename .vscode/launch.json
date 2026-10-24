@@ -25,18 +25,14 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/demo-alone/server.js",
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "serve-extern",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/demo-server/server.js",
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "serve",
@@ -44,9 +40,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/bin/requirejs-esm-serve",
       "args": ["-H"],
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     },
     {
       "name": "test",
@@ -54,9 +48,7 @@
       "request": "launch",
       "program": "${file}",
       "cwd": "${workspaceFolder}",
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }

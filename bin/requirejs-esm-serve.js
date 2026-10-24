@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { configure, serve } = require('../dist/cjs')
-const { version } = require('../package.json')
+import packageJson from '../package.json' with { type: 'json' }
+import { configure, serve } from '../src/index.js'
 
-serve(configure(process.argv.slice(2), 'requirejs-esm-serve', version))
+serve(configure(process.argv.slice(2), 'requirejs-esm-serve', packageJson.version))

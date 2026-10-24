@@ -1,2 +1,3 @@
 minimumReleaseAgeExclude:
+  - connect-block-favicon
   - requirejs-esm

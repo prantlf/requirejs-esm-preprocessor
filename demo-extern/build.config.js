@@ -23,6 +23,6 @@
   onModuleBundleComplete: ({ path }) => {
     const cwd = process.cwd()
     const { rebaseMapFile } = nodeRequire(cwd)
-    rebaseMapFile(`${path}.map`, { [`${cwd}/node_modules/`]: '../node_modules/' });
+    rebaseMapFile(`${path}.map`, { [`${cwd}/node_modules/`]: '../node_modules/' })
   }
 })

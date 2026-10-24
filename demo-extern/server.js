@@ -1,8 +1,10 @@
-const { serve } = require('..')
+import { serve } from '../src/index.js'
 serve({
-  isScript: path => path.endsWith('.js') && !path.endsWith('.min.js') &&
+  isScript: path =>
+    path.endsWith('.js') &&
+    !path.endsWith('.min.js') &&
     (path.startsWith('/demo-extern/src/') || path.startsWith('/node_modules/')) &&
-    !(path.endsWith('/require.js')),
+    !path.endsWith('/require.js'),
   dirMap: {
     '/node_modules/': '',
     '/demo-extern/src/': 'src/'

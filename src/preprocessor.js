@@ -1,9 +1,9 @@
 import { createReadStream } from 'node:fs'
 import { readFile, stat } from 'node:fs/promises'
-import { join } from 'node:path'
 import { STATUS_CODES } from 'node:http'
-import { getType } from 'mime'
-import preprocess from './preprocess'
+import { join } from 'node:path'
+import mime from 'mime'
+import preprocess from './preprocess.js'
 
 function cutQuery(url) {
   const questionMark = url.indexOf('?')
@@ -41,10 +41,10 @@ function createHeaders(path, mtime) {
   return {
     'accept-ranges': 'bytes',
     'last-modified': mtime.toUTCString(),
-    'date': now.toUTCString(),
-    'expires': new Date(now.getTime() + 5000).toUTCString(),
+    date: now.toUTCString(),
+    expires: new Date(now.getTime() + 5000).toUTCString(),
     'cache-control': 'public, max-age=5',
-    'content-type': getType(path) || 'application/octet-stream'
+    'content-type': mime.getType(path) || 'application/octet-stream'
   }
 }
 
@@ -57,7 +57,8 @@ function createRange(size, range) {
   }
   size = end - start + 1
   return {
-    start, end,
+    start,
+    end,
     rangeHeaders: {
       'content-length': size,
       'content-range': `bytes ${start}-${end - 1}/${size}`
@@ -111,23 +112,51 @@ export async function serveFile(req, res, options) {
   }
 }
 
-export async function serveScript(req, res, {
-  cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-  needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
-  useStrict = true, sourceMap = true,
-  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-  verbose, silent
-}) {
+export async function serveScript(
+  req,
+  res,
+  {
+    cache,
+    setHeaders,
+    path,
+    fullPath,
+    resolvePath,
+    dirMap,
+    appDir,
+    needsResolve,
+    skipIfNoImportExport,
+    splitDefaultNamedDeclarations,
+    useStrict = true,
+    sourceMap = true,
+    onBeforeTransform,
+    onAfterTransform,
+    onBeforeUpdate,
+    onAfterUpdate,
+    verbose,
+    silent
+  }
+) {
   const stats = await checkStats(req, res, fullPath, cache)
   const { mtime } = stats
   if (!mtime) return
   const contents = await readFile(fullPath, 'utf8')
   const code = preprocess({
-    path, contents, resolvePath, dirMap, appDir,
-    needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
-    useStrict, sourceMap,
-    onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-    verbose, silent
+    path,
+    contents,
+    resolvePath,
+    dirMap,
+    appDir,
+    needsResolve,
+    skipIfNoImportExport,
+    splitDefaultNamedDeclarations,
+    useStrict,
+    sourceMap,
+    onBeforeTransform,
+    onAfterTransform,
+    onBeforeUpdate,
+    onAfterUpdate,
+    verbose,
+    silent
   })
   const bytes = Buffer.from(code)
   const { length } = bytes
@@ -141,11 +170,26 @@ function endsWithJS(path) {
 }
 
 export function preprocessor({
-  root = '.', isScript = endsWithJS, scriptsOnly, fallthrough, cache, setHeaders,
-  resolvePath, dirMap, appDir, needsResolve, skipIfNoImportExport,
-  splitDefaultNamedDeclarations, useStrict = true, sourceMap = true,
-  onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-  verbose, silent
+  root = '.',
+  isScript = endsWithJS,
+  scriptsOnly,
+  fallthrough,
+  cache,
+  setHeaders,
+  resolvePath,
+  dirMap,
+  appDir,
+  needsResolve,
+  skipIfNoImportExport,
+  splitDefaultNamedDeclarations,
+  useStrict = true,
+  sourceMap = true,
+  onBeforeTransform,
+  onAfterTransform,
+  onBeforeUpdate,
+  onAfterUpdate,
+  verbose,
+  silent
 } = {}) {
   return async (req, res, next) => {
     const path = cutQuery(req.url)
@@ -154,11 +198,24 @@ export function preprocessor({
       let out
       if (isScript(path)) {
         out = await serveScript(req, res, {
-          cache, setHeaders, path, fullPath, resolvePath, dirMap, appDir,
-          needsResolve, skipIfNoImportExport, splitDefaultNamedDeclarations,
-          useStrict, sourceMap,
-          onBeforeTransform, onAfterTransform, onBeforeUpdate, onAfterUpdate,
-          verbose, silent
+          cache,
+          setHeaders,
+          path,
+          fullPath,
+          resolvePath,
+          dirMap,
+          appDir,
+          needsResolve,
+          skipIfNoImportExport,
+          splitDefaultNamedDeclarations,
+          useStrict,
+          sourceMap,
+          onBeforeTransform,
+          onAfterTransform,
+          onBeforeUpdate,
+          onAfterUpdate,
+          verbose,
+          silent
         })
       } else if (!scriptsOnly) {
         out = await serveFile(req, res, { cache, setHeaders, fullPath })

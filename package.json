@@ -2,44 +2,44 @@
   "name": "requirejs-esm-preprocessor",
   "version": "3.4.0",
   "description": "Preprocessor of JavaScript modules in RequireJS projects converting ESM to AMD.",
-  "author": "Ferdinand Prantl <prantlf@gmail.com>",
-  "license": "MIT",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/prantlf/requirejs-esm-preprocessor/blob/master/LICENSE"
-    }
+  "keywords": [
+    "amd",
+    "es6",
+    "esm",
+    "preprocessor",
+    "requirejs"
   ],
   "homepage": "https://github.com/prantlf/requirejs-esm-preprocessor#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/prantlf/requirejs-esm-preprocessor.git"
-  },
   "bugs": {
     "url": "https://github.com/prantlf/requirejs-esm-preprocessor/issues"
   },
-  "engines": {
-    "node": ">=14"
-  },
-  "main": "dist/cjs.js",
-  "module": "dist/esm.js",
-  "types": "dist/esm.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/esm.js",
-      "require": "./dist/cjs.js",
-      "types": "./dist/esm.d.ts"
-    }
+  "license": "MIT",
+  "author": "Ferdinand Prantl <prantlf@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prantlf/requirejs-esm-preprocessor.git"
   },
   "bin": {
     "requirejs-esm-serve": "bin/requirejs-esm-serve.js"
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "src"
   ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "build": "rollup -c",
     "demo": "npm run demo:extern && npm run demo:local",
     "demo:extern": "npm run optimize:extern && npm run minify:extern",
     "optimize:extern": "r.js -o demo-extern/build.config.js",
@@ -49,51 +49,55 @@
     "optimize:local": "r.js -o demo-local/build.config.js",
     "minify:local": "terser -cm --ecma 2018 --comments false --source-map content=demo-local/main-built.js.map --source-map includeSources --source-map url=main-built.min.js.map -o demo-local/main-built.min.js demo-local/main-built.js",
     "start:local": "./bin/requirejs-esm-serve.js",
-    "lint": "biome lint *.mjs bin/requirejs-esm-serve.js src test",
+    "lint": "oxlint",
     "fix": "npm run lint -- --fix",
+    "format": "oxfmt",
     "check": "tehanu test/*.js",
     "cover": "c8 npm run check && c8 --no-clean bin/requirejs-esm-serve.js -S -I -V && c8 --no-clean bin/requirejs-esm-serve.js --no-insecure --no-secure -H && c8 --no-clean bin/requirejs-esm-serve.js -X || c8 --no-clean npm run optimize:local && c8 --no-clean npm run optimize:extern && c8 report -r text -r lcov && c8 check-coverage",
     "test": "npm run lint && npm run cover",
     "start": "python3 -m http.server"
   },
-  "c8": {
-    "include": [
-      "src/**",
-      "dist/*"
-    ],
-    "reporter": [],
-    "branches": 99,
-    "lines": 100,
-    "functions": 100,
-    "statements": 100
-  },
   "dependencies": {
-    "connect-block-favicon": "^1.1.0",
+    "connect-block-favicon": "^2.0.0",
     "cors": "^2.8.6",
-    "mime": "^3.0.0",
-    "morgan": "^1.11.0",
+    "mime": "^4.1.1",
+    "morgan": "^1.12.1",
     "polka": "^0.5.2",
-    "requirejs-esm": "^4.4.0",
+    "requirejs-esm": "^5.0.0",
     "serve-index": "^1.9.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
     "@prantlf/requirejs": "^3.4.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "c8": "^11.0.0",
+    "c8": "^12.0.0",
     "lit-html": "^1",
-    "rollup": "^4.61.1",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "rollup": "^4.65.0",
     "rollup-plugin-copy": "^3.5.0",
     "tehanu": "^1.0.1",
     "tehanu-repo-coco": "^1.0.1",
     "tehanu-teru": "^1.0.1",
-    "terser": "^5.48.0"
+    "terser": "^5.51.2"
   },
-  "keywords": [
-    "requirejs",
-    "preprocessor",
-    "amd",
-    "esm",
-    "es6"
+  "c8": {
+    "branches": 84,
+    "functions": 87,
+    "include": [
+      "src/**",
+      "dist/*"
+    ],
+    "lines": 91,
+    "reporter": [],
+    "statements": 91
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/prantlf/requirejs-esm-preprocessor/blob/master/LICENSE"
+    }
   ]
 }

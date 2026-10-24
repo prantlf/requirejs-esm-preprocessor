@@ -1,5 +1,5 @@
 import { transform } from 'requirejs-esm'
-import { resolvePath as defaultResolvePath } from './resolve-path'
+import { resolvePath as defaultResolvePath } from './resolve-path.js'
 
 const cwd = process.cwd()
 
@@ -26,7 +26,9 @@ export default function preprocess({
   silent
 }) {
   if (appDir && path.startsWith(appDir)) path = path.substring(appDir.length + 1)
-  if (dirMap) resolvePath = (sourcePath, currentFile) => defaultResolvePath(sourcePath, currentFile, { dirMap, needsResolve })
+  if (dirMap)
+    resolvePath = (sourcePath, currentFile) =>
+      defaultResolvePath(sourcePath, currentFile, { dirMap, needsResolve })
   const start = performance.now()
   try {
     const { code, updated } = transform(contents, path, {
@@ -42,7 +44,9 @@ export default function preprocess({
     })
     if (verbose) {
       const duration = (performance.now() - start).toFixed(3)
-      console.log(`${updated ? 'Transformed' : 'Skipped'} "${shortenPath(path)}" in ${duration}ms...`)
+      console.log(
+        `${updated ? 'Transformed' : 'Skipped'} "${shortenPath(path)}" in ${duration}ms...`
+      )
     }
     return code
   } catch (err) {

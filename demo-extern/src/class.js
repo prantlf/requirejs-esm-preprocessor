@@ -1,5 +1,5 @@
-import sum from './sum'
 import { html, render } from 'lit-html/lit-html'
+import sum from './sum'
 
 console.log('Result of sum(1, 2)', sum(1, 2))
 
@@ -12,5 +12,8 @@ class Greeting {
 
 const greeting = new Greeting('world!')
 
-render(html`<br><br>
-${greeting.message}, 1 + 2 = ${sum(1,2)}!`, document.body)
+render(
+  html`<br /><br />
+    ${greeting.message}, 1 + 2 = ${sum(1, 2)}!`,
+  document.body
+)

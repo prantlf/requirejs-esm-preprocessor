@@ -9,4 +9,4 @@ class Greeting {
   }
 }
 
-const greeting = new Greeting('world!')
+const _greeting = new Greeting('world!')

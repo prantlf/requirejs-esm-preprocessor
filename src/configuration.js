@@ -1,10 +1,20 @@
-export function defaultUsage (name, {
-  server = true, port = process.env.PORT || 8967,
-  secureServer = true, securePort = process.env.SECURE_PORT || 9876,
-  host = process.env.HOST || '0.0.0.0', root = '.',
-  errorsOnly = true, servedOnly = true, transforms = false, silent = false,
-  extraOptions = '', extraExamples = ''
-} = {}) {
+export function defaultUsage(
+  name,
+  {
+    server = true,
+    port = process.env.PORT || 8967,
+    secureServer = true,
+    securePort = process.env.SECURE_PORT || 9876,
+    host = process.env.HOST || '0.0.0.0',
+    root = '.',
+    errorsOnly = true,
+    servedOnly = true,
+    transforms = false,
+    silent = false,
+    extraOptions = '',
+    extraExamples = ''
+  } = {}
+) {
   console.log(`Launches a development web server.
 
 Usage: ${name} [option...]
@@ -35,9 +45,18 @@ export function defaultUnknownArg(arg) {
 
 export function configure(args, name, version, options = {}) {
   let {
-    server, port, secureServer, securePort, host, root,
-    errorsOnly = true, servedOnly = true, transforms, silent,
-    usage = defaultUsage, unknownArg = defaultUnknownArg
+    server,
+    port,
+    secureServer,
+    securePort,
+    host,
+    root,
+    errorsOnly = true,
+    servedOnly = true,
+    transforms,
+    silent,
+    usage = defaultUsage,
+    unknownArg = defaultUnknownArg
   } = options
 
   for (let i = 0, l = args.length; i < l; ++i) {
@@ -46,41 +65,53 @@ export function configure(args, name, version, options = {}) {
     if (match) {
       const flag = match[1] !== 'no-'
       switch (match[2]) {
-        case 'I': case 'insecure':
+        case 'I':
+        case 'insecure':
           server = false
           continue
-        case 'p': case 'port':
+        case 'p':
+        case 'port':
           port = +args[++i]
           continue
-        case 'S': case 'secure':
+        case 'S':
+        case 'secure':
           secureServer = false
           continue
-        case 's': case 'secure-port':
+        case 's':
+        case 'secure-port':
           securePort = +args[++i]
           continue
-        case 'h': case 'host':
+        case 'h':
+        case 'host':
           host = args[++i]
           continue
-        case 'r': case 'root':
+        case 'r':
+        case 'root':
           root = args[++i]
           continue
-        case 'e': case 'log-errors':
+        case 'e':
+        case 'log-errors':
           silent = !flag
           continue
-        case 'u': case 'log-successes':
+        case 'u':
+        case 'log-successes':
           errorsOnly = !flag
           continue
-        case 'c': case 'log-cached':
+        case 'c':
+        case 'log-cached':
           servedOnly = !flag
           continue
-        case 't': case 'log-transforms':
+        case 't':
+        case 'log-transforms':
           transforms = flag
           continue
-        case 'V': case 'version':
+        case 'V':
+        case 'version':
           console.log(version)
           process.exit(0)
           break
-        case 'H': case 'help':
+        case 'H':
+        case 'help':
           usage(name, options)
           process.exit(0)
       }
@@ -89,8 +120,15 @@ export function configure(args, name, version, options = {}) {
   }
 
   return {
-    host, root, server, port, secureServer,
+    host,
+    root,
+    server,
+    port,
+    secureServer,
     secureOptions: securePort ? { port: securePort } : undefined,
-    errorsOnly, servedOnly, transforms, silent
+    errorsOnly,
+    servedOnly,
+    transforms,
+    silent
   }
 }

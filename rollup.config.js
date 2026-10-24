@@ -3,13 +3,10 @@ import copy from 'rollup-plugin-copy'
 
 export default {
   input: 'src/index.js',
-  output: [
-    { file: 'dist/cjs.js', format: 'cjs', sourcemap: true },
-    { file: 'dist/esm.js', format: 'esm', sourcemap: true }
-  ],
+  output: [{ file: 'dist/index.cjs', format: 'cjs', sourcemap: true }],
   plugins: [
     nodeResolve({ preferBuiltins: true }),
-    copy ({
+    copy({
       targets: [
         { src: 'src/index.d.ts', dest: 'dist', rename: 'esm.d.ts' },
         { src: ['src/certificates/*.key', 'src/certificates/*.crt'], dest: 'dist/certificates' }
@@ -17,7 +14,13 @@ export default {
     })
   ],
   external: [
-    'connect-block-favicon', 'cors', 'fs/promises', 'mime', 'morgan', 'polka',
-    'requirejs-esm', 'serve-index'
+    'connect-block-favicon',
+    'cors',
+    'node:fs/promises',
+    'mime',
+    'morgan',
+    'polka',
+    'requirejs-esm',
+    'serve-index'
   ]
 }

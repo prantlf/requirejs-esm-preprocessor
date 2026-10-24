@@ -1,7 +1,7 @@
 import http from 'node:http'
 
 interface DirMap {
-  [ key: string ]: string
+  [key: string]: string
 }
 
 type NeedsResolve = (sourcePath: string, currentFile: string) => boolean
@@ -21,13 +21,20 @@ interface AmdOptions {
   output?: Record<string, unknown>
 }
 
-declare function resolvePath(sourcePath: string, currentFile: string, options?: ResolveOptions): string
+declare function resolvePath(
+  sourcePath: string,
+  currentFile: string,
+  options?: ResolveOptions
+): string
 
 declare function rebasePath(path: string, dirMap?: DirMap): string
 declare function rebaseMap(map: object, dirMap?: DirMap): void
 declare function rebaseMapFile(file: string, dirMap?: DirMap): void
+declare function rebaseMapFileAsync(file: string, dirMap?: DirMap): Promise<void>
 
-type ResolvePath = ((sourcePath: string, currentFile: string, options?: ResolveOptions) => string) | false
+type ResolvePath =
+  | ((sourcePath: string, currentFile: string, options?: ResolveOptions) => string)
+  | false
 type OnBeforeTransform = (options: OnBeforeTransformOptions) => void
 type OnAfterTransform = (options: OnAfterTransformOptions) => void
 type OnBeforeUpdate = (options: AmdOptions) => boolean
@@ -35,43 +42,84 @@ type OnAfterUpdate = (options: AmdOptions) => boolean
 type IsScript = (path: string) => boolean
 
 declare function preprocess(options?: {
-  path: string, contents: string, dirMap?: DirMap, appDir?: string,
-  needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  skipIfNoImportExport?: boolean /*= false */,
-  splitDefaultNamedDeclarations?: boolean /*= false */,
-  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
-  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
-  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
-  verbose?: boolean, silent?: boolean }): string
+  path: string
+  contents: string
+  dirMap?: DirMap
+  appDir?: string
+  needsResolve?: NeedsResolve
+  resolvePath?: ResolvePath /*= false */
+  skipIfNoImportExport?: boolean /*= false */
+  splitDefaultNamedDeclarations?: boolean /*= false */
+  useStrict?: boolean /*= true*/
+  sourceMap?: boolean /*= true */
+  onBeforeTransform?: OnBeforeTransform
+  onAfterTransform?: OnAfterTransform
+  onBeforeUpdate?: OnBeforeUpdate
+  onAfterUpdate?: OnAfterUpdate
+  verbose?: boolean
+  silent?: boolean
+}): string
 
 type Handler = (req: http.OutgoingMessage, res: http.IncomingMessage, next: () => void) => void
 
-declare function serveFile(req: http.OutgoingMessage, res: http.IncomingMessage, options: string | {
-  fallthrough?: boolean, cache?: boolean,
-  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void
-}) :void
-declare function serveScript(req: http.OutgoingMessage, res: http.IncomingMessage, options?: {
-  fallthrough?: boolean, cache?: boolean,
-  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
-  path: string, fullPath: string, dirMap?: DirMap, appDir?: string,
-  needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  skipIfNoImportExport?: boolean /*= false */,
-  splitDefaultNamedDeclarations?: boolean /*= false */,
-  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
-  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
-  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
-  verbose?: boolean, silent?: boolean }): void
+declare function serveFile(
+  req: http.OutgoingMessage,
+  res: http.IncomingMessage,
+  options:
+    | string
+    | {
+        fallthrough?: boolean
+        cache?: boolean
+        setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void
+      }
+): void
+declare function serveScript(
+  req: http.OutgoingMessage,
+  res: http.IncomingMessage,
+  options?: {
+    fallthrough?: boolean
+    cache?: boolean
+    setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void
+    path: string
+    fullPath: string
+    dirMap?: DirMap
+    appDir?: string
+    needsResolve?: NeedsResolve
+    resolvePath?: ResolvePath /*= false */
+    skipIfNoImportExport?: boolean /*= false */
+    splitDefaultNamedDeclarations?: boolean /*= false */
+    useStrict?: boolean /*= true*/
+    sourceMap?: boolean /*= true */
+    onBeforeTransform?: OnBeforeTransform
+    onAfterTransform?: OnAfterTransform
+    onBeforeUpdate?: OnBeforeUpdate
+    onAfterUpdate?: OnAfterUpdate
+    verbose?: boolean
+    silent?: boolean
+  }
+): void
 declare function preprocessor(options?: {
-  root?: string /*= '.' */, scriptsOnly?: boolean, fallthrough?: boolean,
-  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void,
-  cache?: boolean, isScript?: IsScript, dirMap?: DirMap, appDir?: string,
-  needsResolve?: NeedsResolve, resolvePath?: ResolvePath /*= false */,
-  skipIfNoImportExport?: boolean /*= false */,
-  splitDefaultNamedDeclarations?: boolean /*= false */,
-  useStrict?: boolean /*= true*/, sourceMap?: boolean /*= true */,
-  onBeforeTransform?: OnBeforeTransform, onAfterTransform?: OnAfterTransform,
-  onBeforeUpdate?: OnBeforeUpdate, onAfterUpdate?: OnAfterUpdate,
-  verbose?: boolean, silent?: boolean }): Handler
+  root?: string /*= '.' */
+  scriptsOnly?: boolean
+  fallthrough?: boolean
+  setHeaders?: (res: http.Response, path: string, stat: fs.Stat) => void
+  cache?: boolean
+  isScript?: IsScript
+  dirMap?: DirMap
+  appDir?: string
+  needsResolve?: NeedsResolve
+  resolvePath?: ResolvePath /*= false */
+  skipIfNoImportExport?: boolean /*= false */
+  splitDefaultNamedDeclarations?: boolean /*= false */
+  useStrict?: boolean /*= true*/
+  sourceMap?: boolean /*= true */
+  onBeforeTransform?: OnBeforeTransform
+  onAfterTransform?: OnAfterTransform
+  onBeforeUpdate?: OnBeforeUpdate
+  onAfterUpdate?: OnAfterUpdate
+  verbose?: boolean
+  silent?: boolean
+}): Handler
 
 interface BaseOptions {
   root?: string /*= '.' */
@@ -107,8 +155,12 @@ interface ConfigureResult extends BaseConfigureOptions {
 
 declare function defaultUsage(name: string, options?: UsageOptions): void
 declare function defaultUnknownArg(arg: string): boolean
-declare function configure(args: string[], name: string, version: string,
-  options?: ConfigureOptions): ConfigureResult
+declare function configure(
+  args: string[],
+  name: string,
+  version: string,
+  options?: ConfigureOptions
+): ConfigureResult
 
 interface LogOptions extends BaseLogOptions {
   format?: string /*= 'dev' */
@@ -158,8 +210,14 @@ interface OnAfterTransformOptions extends OnBeforeTransformOptions {
 
 declare function createHandler(options?: ServerOptions): Handler
 declare function createServer(options?: ServerOptions, handler?: Handler): http.Server
-declare function createSecureServer(options?: ServerOptions, handler?: Handler): Promise<http.Server>
-declare function startServer(options?: ServerOptions,
-  server?: http.Server | false, secureServer?: http.Server | false,
-  handler?: Handler) : Promise<{ server?: http.Server, secureServer?: http.Server }>
+declare function createSecureServer(
+  options?: ServerOptions,
+  handler?: Handler
+): Promise<http.Server>
+declare function startServer(
+  options?: ServerOptions,
+  server?: http.Server | false,
+  secureServer?: http.Server | false,
+  handler?: Handler
+): Promise<{ server?: http.Server; secureServer?: http.Server }>
 declare function serve(options?: ServerOptions): void

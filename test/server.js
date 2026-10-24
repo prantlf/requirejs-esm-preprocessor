@@ -1,8 +1,11 @@
-const { readFile } = require('node:fs/promises')
-const protocols = { http: require('node:http'), https: require('node:http') }
-const { ok, equal } = require('node:assert')
-const test = require('tehanu')(__filename)
-const { createServer, createSecureServer, startServer } = require('../dist/cjs')
+import { ok, equal } from 'node:assert'
+import { readFile } from 'node:fs/promises'
+import http from 'node:http'
+import tehanu from 'tehanu'
+import { createServer, createSecureServer, startServer } from '../src/index.js'
+
+const protocols = { http, https: http }
+const test = tehanu(import.meta.filename)
 
 let server, secureServer
 test.before(async () => ({ server, secureServer } = await startServer({ host: 'localhost' })))
@@ -13,18 +16,25 @@ test.after(async () => {
 
 function request(path, { method = 'GET', protocol = 'http', headers } = {}) {
   return new Promise((resolve, reject) =>
-    protocols[protocol].request({
-      method, path, headers,
-      hostname: 'localhost',
-      port: 8967
-    }, res => {
-      let data = ''
-      res.setEncoding('utf8')
-      res.on('data', chunk => data += chunk)
-      res.on('end', () => resolve({ res, data }))
-    })
-    .on('error', reject)
-    .end())
+    protocols[protocol]
+      .request(
+        {
+          method,
+          path,
+          headers,
+          hostname: 'localhost',
+          port: 8967
+        },
+        res => {
+          let data = ''
+          res.setEncoding('utf8')
+          res.on('data', chunk => (data += chunk))
+          res.on('end', () => resolve({ res, data }))
+        }
+      )
+      .on('error', reject)
+      .end()
+  )
 }
 
 test('creates a default handler', async () => {
@@ -75,7 +85,9 @@ test('serves a part of a file', async () => {
 })
 
 test('serves a part of a script', async () => {
-  const { res, data } = await request('/demo-local/src/index.js', { headers: { range: 'bytes=0-6' } })
+  const { res, data } = await request('/demo-local/src/index.js', {
+    headers: { range: 'bytes=0-6' }
+  })
   equal(res.statusCode, 206)
   equal(data, 'require')
 })
@@ -99,18 +111,21 @@ test('fails for an invalid range of a script', async () => {
 test('recognises the same content', async () => {
   const { res: cache } = await request('/LICENSE')
   const { 'last-modified': date } = cache.headers
-  const { res } = await request('/LICENSE', { headers: { 'if-modified-since': date }})
+  const { res } = await request('/LICENSE', { headers: { 'if-modified-since': date } })
   equal(res.statusCode, 304)
 })
 
 test('serves an ESM script', async () => {
   const { res, data } = await request('/demo-local/src/sum.js')
   equal(res.statusCode, 200)
-  equal(data, `define(function () {
+  equal(
+    data,
+    `define(function () {
   "use strict";
   return (a, b) => a + b;
 });
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9kZW1vLWxvY2FsL3NyYy9zdW0uanMiXSwibmFtZXMiOlsiYSIsImIiXSwibWFwcGluZ3MiOiI7O1NBQWUsQ0FBQ0EsR0FBR0MsTUFBTUQsSUFBSUMiLCJmaWxlIjoiL2RlbW8tbG9jYWwvc3JjL3N1bS5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IChhLCBiKSA9PiBhICsgYlxuIl19`)
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9kZW1vLWxvY2FsL3NyYy9zdW0uanMiXSwibmFtZXMiOlsiYSIsImIiXSwibWFwcGluZ3MiOiI7O1NBQWUsQ0FBQ0EsR0FBR0MsTUFBTUQsSUFBSUMiLCJmaWxlIjoiL2RlbW8tbG9jYWwvc3JjL3N1bS5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IChhLCBiKSA9PiBhICsgYlxuIl19`
+  )
 })
 
 test('serves an AMD script', async () => {
@@ -123,6 +138,8 @@ test('serves an AMD script', async () => {
 test('recognises the same script', async () => {
   const { res: cache } = await request('/demo-local/src/index.js')
   const { 'last-modified': date } = cache.headers
-  const { res } = await request('/demo-local/src/index.js', { headers: { 'if-modified-since': date }})
+  const { res } = await request('/demo-local/src/index.js', {
+    headers: { 'if-modified-since': date }
+  })
   equal(res.statusCode, 304)
 })

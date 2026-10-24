@@ -32,7 +32,7 @@ Add the following property to the build configuration file for the RequireJS opt
 Create a file `server.js` to be used as the development web server:
 
 ```js
-const { serve } = require('requirejs-esm-preprocessor')
+import { serve } from 'requirejs-esm-preprocessor'
 serve({
   // Transform local sources; not require.js loaded on the page from node_modules
   isScript: path => path.endsWith('.js') && path.startsWith('/src/')
@@ -61,7 +61,7 @@ You can bundle ESM modules from outside of your source root too. For example:
 
 ```js
 import { html, render } from 'lit-html/lit-html'
-render(html`<p>Hello, world!<p>`, document.body)
+render(html`<p>Hello, world!</p>`, document.body)
 ```
 
 Let `lit-html` be a path alias in the RequireJS configuration pointing to a directory among NPM dependencies outside the source root:
@@ -95,7 +95,7 @@ If you want to merge the NPM dependencies bundled in your project with the other
 {
   onModuleBundleComplete: ({ path }) => {
     const { rebaseMapFile } = nodeRequire('requirejs-esm-preprocessor')
-    rebaseMapFile(`${path}.map`, { [`${process.cwd()}/node_modules/`]: '../node_modules/' });
+    rebaseMapFile(`${path}.map`, { [`${process.cwd()}/node_modules/`]: '../node_modules/' })
   }
 }
 ```
@@ -103,7 +103,7 @@ If you want to merge the NPM dependencies bundled in your project with the other
 The development web server must not transform static assets that are not meant to be bundled in the optimised output:
 
 ```js
-const { serve } = require('requirejs-esm-preprocessor')
+import { serve } from 'requirejs-esm-preprocessor'
 serve({
   isScript: path => path.endsWith('.js') &&
     !path => path.endsWith('.min.js') &&
@@ -154,6 +154,7 @@ resolvePath(sourcePath: string, currentFile: string, options?: ResolveOptions): 
 rebasePath(path: string, dirMap?: DirMap): string
 rebaseMap(map: object, dirMap?: DirMap): void
 rebaseMapFile(file: string, dirMap?: DirMap): void
+rebaseMapFileAsync(file: string, dirMap?: DirMap): Promise<void>
 
 type ResolvePath = ((sourcePath: string, currentFile: string, options?: ResolveOptions) => string) | false
 type IsScript = (path: string) => boolean

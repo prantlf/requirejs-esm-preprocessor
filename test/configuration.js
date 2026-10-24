@@ -1,11 +1,21 @@
-const { strictEqual, deepStrictEqual } = require('node:assert')
-const test = require('tehanu')(__filename)
-const { configure, defaultUsage, defaultUnknownArg } = require('../dist/cjs')
+import { strictEqual, deepStrictEqual } from 'node:assert'
+import tehanu from 'tehanu'
+import { configure, defaultUsage, defaultUnknownArg } from '../src/index.js'
+
+const test = tehanu(import.meta.filename)
 
 test('returns default options', () => {
   const {
-    host, root, server, port, secureServer, secureOptions,
-    errorsOnly, servedOnly, transforms, silent
+    host,
+    root,
+    server,
+    port,
+    secureServer,
+    secureOptions,
+    errorsOnly,
+    servedOnly,
+    transforms,
+    silent
   } = configure([])
   strictEqual(host, undefined)
   strictEqual(root, undefined)
@@ -21,11 +31,31 @@ test('returns default options', () => {
 
 test('returns requested options', () => {
   const {
-    host, root, server, port, secureServer, secureOptions,
-    errorsOnly, servedOnly, transforms, silent
+    host,
+    root,
+    server,
+    port,
+    secureServer,
+    secureOptions,
+    errorsOnly,
+    servedOnly,
+    transforms,
+    silent
   } = configure([
-    '-h', 'host', '-r', 'root', '-no-I', '-p', '80', '-no-S', '-s', '443',
-    '-no-e', '-no-u', '-c', '-t'
+    '-h',
+    'host',
+    '-r',
+    'root',
+    '-no-I',
+    '-p',
+    '80',
+    '-no-S',
+    '-s',
+    '443',
+    '-no-e',
+    '-no-u',
+    '-c',
+    '-t'
   ])
   strictEqual(host, 'host')
   strictEqual(root, 'root')
