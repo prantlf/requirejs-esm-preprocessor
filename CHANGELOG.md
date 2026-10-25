@@ -1,5 +1,18 @@
 # Changes
 
+## [4.0.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.4.0...v4.0.0) (2026-10-25)
+
+### Chores
+
+* Upgrade, convert to ESM ([57caffa](https://github.com/prantlf/requirejs-esm-preprocessor/commit/57caffa276345e147f6edd2fa6fb6e8d12c31ace))
+
+### BREAKING CHANGES
+
+ESM exports are now bundled any more. This should not
+break anything, but it needs to be tested. The scripts in the bin directory
+are ESM now and need Node.js 22 or newer. This shouldn't be a problem
+today either.
+
 ## [3.4.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.3.0...v3.4.0) (2026-06-06)
 
 ### Features
