@@ -1,12 +1,15 @@
 import { readFile } from 'node:fs/promises'
 import http from 'node:http'
 import http2 from 'node:http2'
+import { join } from 'node:path'
 import blockFavicon from 'connect-block-favicon'
 import cors from 'cors'
 import morgan from 'morgan'
 import polka from 'polka'
 import serveIndex from 'serve-index'
 import { preprocessor } from './preprocessor.js'
+
+const scriptDirectory = import.meta.dirname || join(__dirname, 'src')
 
 export function createHandler(options = {}) {
   const {
@@ -89,8 +92,8 @@ export function createServer(options = {}, handler) {
 export async function createSecureServer(options = {}, handler) {
   const { secureOptions = {} } = options
   let {
-    key = `${__dirname}/certificates/localhost.key`,
-    cert = `${__dirname}/certificates/localhost.crt`,
+    key = `${scriptDirectory}/certificates/localhost.key`,
+    cert = `${scriptDirectory}/certificates/localhost.crt`,
     allowHTTP1 = true
   } = secureOptions
 
