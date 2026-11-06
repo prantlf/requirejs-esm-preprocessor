@@ -1,5 +1,11 @@
 # Changes
 
+## [4.0.1](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v4.0.0...v4.0.1) (2026-11-06)
+
+### Bug Fixes
+
+* Fix usage of __dirname in ESM ([fc5e79a](https://github.com/prantlf/requirejs-esm-preprocessor/commit/fc5e79a3b66bc79ec107faabd8d588655000ecfa))
+
 ## [4.0.0](https://github.com/prantlf/requirejs-esm-preprocessor/compare/v3.4.0...v4.0.0) (2026-10-25)
 
 ### Chores
